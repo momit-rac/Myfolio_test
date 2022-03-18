@@ -1,0 +1,105 @@
+
+<link rel="stylesheet" href="./reset.css">
+<link rel="stylesheet" href="./theme.css">
+<link rel="stylesheet" href="./login_page.css">
+
+<div id="login-columns" class="cfix" oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
+    <!-- 로그인 위젯 -->
+
+    <!-- <div class="prev_page"><a href="https://manager.mounda.co.kr/"><img src="./layouts/Central_Server_2/asset/back_btn-left-white.png" alt="화살표">돌아가기</a></div> -->
+
+    <div class="login_section d-flex justify-content-center align-items-center">
+        <div class="login_wrapper d-flex">
+            <div class="logo"><img src="../img/logo1.png" alt="로고"></div>
+            <div class="card-top">
+                <h1 class="cont_tit">로그인</h1> 
+                <p class="cont_txt">반가워요 :&rpar;<br />로그인을 해주세요!</p>
+            </div>
+
+            <!-- 로그인 입력폼 -->
+            <form id="account-signup" action="https://manager.mounda.co.kr/dashboard" method="post" ruleset="@login" class="fancyform" >
+                <fieldset>
+                    <input type="hidden" name="act" value="procMemberLogin" />
+                    <input type="hidden" name="success_return_url" value="{getRequestUriByServerEnviroment()}" />
+
+                    <div class="login_box p_r">
+                        <img src="../img/id_icon.png" class="login_icon p_a" alt="아이디">
+                        <input name="user_id" type="text" title="user id" id="user_id" class="form-text id" value="" placeholder="아이디" autofocus />
+                    </div>
+                    <!-- 아이디 입력 폼 -->
+                    <div class="login_box p_r">
+                        <img src="../img/pw_icon.png" class="login_icon p_a" alt="비밀번호" style="width: auto;height: 1.2rem;">
+                        <input name="password" type="password" title="password" id="password" class="form-text" value="" placeholder="비밀번호" />
+                        <div class="icon_wrapper p_a login_icon preview_icon d-flex align-items-center">
+                            <img src="../img/preview_icon.png" alt="비밀번호 확인">
+                        </div>
+                    </div>     
+                                 
+                    <!-- <div cond="$XE_VALIDATOR_MESSAGE" class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+                        <p>{$XE_VALIDATOR_MESSAGE}</p>
+                    </div>                 -->
+                    <!-- 비밀번호 입력 폼 -->
+
+                    <!-- 오류 출력 메세지 -->
+
+                    <!-- <div class="form-signup d-flex align-items-center">
+                        <div class="keep">
+                            <div class="signup_chk d-flex align-items-center">
+                                <img src="./layouts/Central_Server_2/asset/none_chk.svg" class="signup_icon" alt="signup_chk">
+                                <span>자동 로그인</span>
+                            </div>
+                        </div>
+                        <div class="save">
+                            <div class="signup_chk d-flex align-items-center">
+                                <img src="./layouts/Central_Server_2/asset/none_chk.svg" class="signup_icon" alt="signup_chk">
+                                <span>아이디 저장</span>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <a target="_self" class="auth-forgot auth-fogot-1" href="{getUrl('','act','dispMemberSignUpForm')}" style="margin-top: 3rem;">
+                        <block>아직 계정이 없으신가요? <b style="font-weight: 500;">회원가입</b></block>
+                    </a>
+
+                    <div class="auth-forgot auth-fogot-2" style="margin-top: 1rem;">
+                        <block>계정을 잊으셨나요? <b style="font-weight: 500;">ID찾기</b> 또는 <b style="font-weight: 500;">비밀번호 찾기</b></block>
+                    </div>
+                    <!-- 회원 찾기 페이지 이동-->
+
+                    <input type="submit" class="active_btn login form-text form-button-default right" value="로그인" style="text-align: center"/>
+                    <!-- 로그인 버튼 -->
+                </fieldset>
+            </form>
+            <p class="comp_info">&copy; MOMIT Inc. All rights reserved.</p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(".preview_icon").on("mousedown", function(){
+        $(this).prev().attr("type", "text");
+    }).on("mouseup mouseleave", function(){
+        $(this).prev().attr("type", "password");
+    });
+
+    $('.keep .signup_chk').on('click', ()=>{
+        if(!$('.keep .signup_chk').hasClass('active')){
+            $('.keep .signup_chk').addClass('active');
+            $('.keep .signup_chk').find('.signup_icon').attr('src', './layouts/Central_Server_2/asset/chk_box.svg');
+        }else{
+            $('.keep .signup_chk').removeClass('active');
+            $('.keep .signup_chk').find('.signup_icon').attr('src', './layouts/Central_Server_2/asset/none_chk.svg');
+        }
+    })
+
+    $('.save .signup_chk').on('click', ()=>{
+        if(!$('.save .signup_chk').hasClass('active')){
+            $('.save .signup_chk').addClass('active');
+            $('.save .signup_chk').find('.signup_icon').attr('src', './layouts/Central_Server_2/asset/chk_box.svg');
+        }else{
+            $('.save .signup_chk').removeClass('active');
+            $('.save .signup_chk').find('.signup_icon').attr('src', './layouts/Central_Server_2/asset/none_chk.svg');
+        }
+    })
+</script>
