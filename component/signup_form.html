@@ -1,0 +1,2150 @@
+<link rel="stylesheet" href="./reset.css">
+<link rel="stylesheet" href="./theme.css">
+<link rel="stylesheet" href="./sign_up.css">
+<!--// datepicker javascript plugin load -->
+<!--%load_js_plugin("ui")-->
+<!--%load_js_plugin("ui.datepicker")-->
+<!-- <include target="./common_header.html" /> -->
+
+<div class="prev_page">
+    <img src="./layouts/Central_Server_2/asset/back_btn-left-white.png" alt="화살표">돌아가기
+</div>
+
+<div class="register_section d-flex justify-content-center align-items-center" oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
+
+    <form ruleset="@insertMember" id="fo_insert_member" action="./" method="post" enctype="multipart/form-data" class="form-horizontal registerform">
+    <input type="hidden" name="act" value="procMemberInsert" />
+    <input type="hidden" name="xe_validator_id" value="modules/member/skins" />
+    <input type="hidden" name="success_return_url" value="{getUrl('act','dispMemberInfo')}" />
+    <!-- STEP1 -->
+    <div class="register_wrapper d-flex p_r">
+
+        <div class="logo"><img src="../img/logo1.png" alt="로고"></div>
+        <div class="card-top">
+            <h1 class="cont_tit">회원가입</h1>
+            <p class="cont_txt">안녕하세요!<br />도입하기 앞서 아래 정보를 입력해주세요 :&rpar;</p>
+        </div>
+        
+        <div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/member/skins'"
+            class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+            <p>{$XE_VALIDATOR_MESSAGE}</p>
+        </div>
+
+        <div class="step_num">1/3</div>
+        
+        
+        <div class="register_container">
+            <!-- <div class="control-group p_r" id="is_manager_container">
+                <input type="radio" id="is_manager" name="is_manager" value="manager" checked><label for="manager">모임장</label>
+                <input type="radio" id="is_user" name="is_manager" value="user"><label for="user">회원</label>
+                <input type="hidden" id="isManager" name="ismanager" value=""/>
+            </div> -->
+
+            <div class="control-group p_r" id="rep_name_container">
+                <div class="form_tit p_a"><label for="rep_name" class="control-label">대표자명</label></div>
+                <div class="controls form_txt">
+                    <input type="text" name="chk_name" autofocus id="chk_name" value="" placeholder="대표자명을 입력해주세요 (10자 이내)" required onchange="removeActive(event)" onfocusin="focusIn(event)" onfocusout="chkName(event)" onkeydown="error_remove(event)" maxlength="10" />
+                    <i class="fa-solid fa-check" id="name_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_name_error"></span>
+                    <input type="hidden" name="user_name" id="rep_name" value="" placeholder="" required onkeydown="error_remove(event)"/>
+                </div>
+                
+            </div>
+            
+
+            
+
+            <div class="control-group p_r" id="rep_email_container">
+                <div class="form_tit p_a"><label for="email_address" class="control-label">대표 이메일</label></div>
+                <div class="controls form_txt">
+                    <input type="email" name="input_email" id="input_email"  value="" placeholder="대표 이메일을 입력해주세요" onchange="removeActive(event)" required onfocusout="chkEmail(event)" onfocusin="focusIn(event)" onkeydown="error_remove(event)" />
+                    <i class="fa-solid fa-check" id="email_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_email_error"></span>
+                    <input type="hidden" name="email_address" id="email_address" value=""/>
+                </div>
+            </div>
+
+            
+
+            <div class="control-group p_r" id="rep_phone_container">
+                <div class="form_tit p_a"><label for="phone_number" class="control-label">대표 연락처</label></div>
+                <div class="controls form_txt">
+                    <input type="tel" name="phone_number" id="phone_number" class="phone_number" value="" placeholder="'-' 없이 입력해주세요" required onchange="removeActive(event)" onfocusout="chkPhone(event)" onfocusin="focusIn(event)" onkeydown="error_remove(event)"/>
+                    <i class="fa-solid fa-check" id="phone_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_phone_error"></span>
+                    
+                    <input type="hidden" name="phone_chk" id="phone_chk" value="" placeholder="" required onkeydown="error_remove(event)"/>
+                </div>
+
+                <div class="verification" onclick="send_verification()">인증하기</div>
+                <div class="resend_btn d-none" onclick="send_verification()">재요청</div>
+            </div>
+
+            <div class="control-group p_r verify_group" style="display: none;">
+                <div class="form_tit p_a"><label for="phone_number" class="control-label">인증번호</label></div>
+                <div class="controls form_txt">
+                    <input type="text" name="verify_code" id="verify_code" class="verify_code" value="" placeholder="인증번호를 입력해주세요" required onfocusout="chkVerify(event)" onfocusin="focusIn(event)" onkeydown="error_remove(event)"/>
+                    <i class="fa-solid fa-check" id="verify_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_verify_error"></span>
+                </div>
+
+                <div class="verification_accept_container d-flex align-items-center">
+                    <div class="verification_accept">인증확인</div> 
+                </div>
+                
+            </div>
+
+            
+
+            <div class="active_btn btnArea" id="first_btnArea">
+                <div class="form_txt">
+                    <input type="button" value="다음 단계" class="btn btn-inverse pull-right form-button-re right" id="first_btn"/>
+                </div>
+            </div>
+
+            <!-- <div class="control-group p_r" id="user_name_container">
+                <div class="form_tit p_a"><label for="user_name" class="control-label">회원명</label></div>
+                <div class="controls form_txt">
+                    <input type="text" name="user_chk_name" id="user_chk_name" value="" placeholder="" required onchange="removeActive(event)" onfocusout="chkUserName(event)" onkeydown="error_remove(event)" maxlength="10"/>
+                    <span class="help-inline" id="user_name_error"></span>
+                </div>
+            </div>
+            
+
+            
+
+            <div class="control-group p_r" id="user_phone_container">
+                <div class="form_tit p_a"><label for="phone_number" class="control-label">회원 연락처</label></div>
+                <div class="controls form_txt">
+                    <input type="tel" name="user_phone_number" id="user_phone_number" class="user_phone_number" value="" placeholder="'-' 기호를 제외한 전화번호를 입력해주세요" required onchange="removeActive(event)" onfocusout="chkUserPhone(event)" onkeydown="error_remove(event)"/>
+                    <span class="help-inline" id="user_phone_error"></span>
+                </div>
+            </div>
+
+            
+
+            <div class="control-group p_r" id="user_email_container">
+                <div class="form_tit p_a"><label for="email_address" class="control-label">회원 이메일</label></div>
+                <div class="controls form_txt">
+                    <input type="email" name="user_input_email" id="user_input_email" value="" placeholder="" onchange="removeActive(event)" required onfocusout="chkUserEmail(event)" onkeydown="error_remove(event)"/>
+                    <span class="help-inline" id="user_email_error"></span>
+                    <input type="hidden" name="user_email_address" id="user_email_address" value="" placeholder="" required onkeydown="error_remove(event)"/>
+                </div>
+
+                <div class="user_verification">인증하기</div>
+            </div>
+
+            <div class="control-group p_r user_verify_group" style="display: none;">
+                <div class="form_tit p_a"><label for="phone_number" class="control-label">인증번호</label></div>
+                <div class="controls form_txt">
+                    <input type="text" name="user_verify_code" id="user_verify_code" class="user_verify_code" value="" placeholder="" required onfocusout="chkUserVerify(event)" onkeydown="error_remove(event)"/>
+                    <span class="help-inline" id="user_verify_error"></span>
+                </div>
+
+                <div class="user_verification_accept">인증확인</div>
+            </div>
+
+            
+
+            <div class="user_btnArea" style="display: none;">
+                <div class="form_txt">
+                    <input type="button" value="다음 단계" class="btn btn-inverse pull-right form-button-re right" id="user_first_btn"/>
+                </div>
+            </div> -->
+        </div>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+    <!-- STEP2 -->
+    <div class="register_wrapper d-flex p_r">
+
+        <div class="logo"><img src="../img/logo1.png" alt="로고"></div>
+        <img src="./layouts/Central_Server_2/asset/back_btn-left.png" class="arrow_btn p_a" alt=""></img>
+        <div class="card-top">
+            <h1 class="cont_tit">회원가입</h1>
+            <p class="cont_txt">안녕하세요!<br />도입하기 앞서 아래 정보를 입력해주세요 :&rpar;</p>
+        </div>
+        
+        <div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/member/skins'"
+            class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+        </div>
+
+        <div class="step_num">2/3</div>
+        <div class="register_container">
+
+
+            <div class="control-group p_r" id="rep_id_container">
+                <div class="form_tit p_a"><label for="{$identifierForm->name}" class="control-label">관리자 ID</label></div>
+                <div class="controls form_txt">
+                    <input type="text" id="chk_id"required onkeydown="error_remove(event)" onchange="removeActive(event)" onfocusin="focusIn(event)" onfocusout="chkId(event)" placeholder="6-12자 이내 특수문자 제외한 영문,숫자 사용 가능" minlength="6" maxlength="12"/>
+                    <i class="fa-solid fa-check" id="id_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_id_error"></span>
+                    <input type="hidden" |cond="$identifierForm->name!='email_address'" type="email"
+                        |cond="$identifierForm->name=='email_address'" name="{$identifierForm->name}"
+                        id="{$identifierForm->name}" value="" placeholder="" required/>
+                </div>
+            </div>
+
+            <div class="control-group p_r" id="rep_pw_container">
+                <div class="form_tit p_a"><label for="password" class="control-label">관리자 PW</label></div>
+                <div class="controls form_txt">
+                    <input type="password" name="password" id="password" class="password" value="" placeholder="6자 이상, 영문/숫자 포함" required onfocusin="focusIn(event)" onchange="removeActive(event)" onkeydown="error_remove(event)" onfocusout="chkPw(event)"/>
+                    <i class="fa-solid fa-check" id="pw_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_pw_error"></span>
+                    <img src="./layouts/Central_Server_2/asset/preview_icon.png" class="login_icon preview_icon p_a" id="pw_preview" alt="관리자 PW 보기">
+                </div>
+            </div>
+
+            <div class="control-group p_r" id="rep_pwchk_container">
+                <div class="form_tit p_a"><label for="password2" class="control-label">관리자 PW 확인</label></div>
+                <div class="controls form_txt">
+                    <input type="password" name="password2" id="password2" class="password" value="" placeholder="다시 한번 입력해주세요" required onfocusin="focusIn(event)" onchange="removeActive(event)" onfocusout="chkPw(event)" onkeydown="error_remove(event)"/>
+                    <i class="fa-solid fa-check" id="chkpw_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_pwchk_error"></span>
+                    <img src="./layouts/Central_Server_2/asset/preview_icon.png" class="login_icon preview_icon p_a" id="pw2_preview" alt="관리자 PW 확인 보기">
+                </div>
+            </div>
+
+            <!-- <script>
+                $("#pw_preview").on("click", function(){
+                    
+                    if($('#password').hasClass('active')){
+                        $('#password').attr("type", "password");
+                        $('#password').removeClass('active');
+                        
+                    }
+                    else{
+                        $('#password').attr("type", "text");
+                        $('#password').addClass('active');
+                    }
+                    
+                })
+
+                $("#pw2_preview").on("click", function(){
+                    
+                    if($('#password2').hasClass('active')){
+                        $('#password2').attr("type", "password");
+                        $('#password2').removeClass('active');
+                        
+                    }
+                    else{
+                        $('#password2').attr("type", "text");
+                        $('#password2').addClass('active');
+                    }
+                    
+                })
+            </script> -->
+
+            <div class="active_btn btnArea" id="second_btnArea">
+                <div class="form_txt">
+                    <input type="button" value="다음 단계" class="btn btn-inverse pull-right form-button-re right" id="second_btn"/>
+                </div>
+            </div>
+
+            <!-- <div class="control-group p_r" id="user_id_container">
+                <div class="form_tit p_a"><label for="{$identifierForm->name}" class="control-label">회원 ID</label></div>
+                <div class="controls form_txt">
+                    <input type="text" id="user_chk_id"required onkeydown="error_remove(event)" onchange="removeActive(event)" onfocusout="chkUserId(event)" placeholder="6-12자 이내,영문,숫자 사용 가능"/>
+                    <span class="help-inline" id="user_id_error"></span>
+                    <input type="hidden" |cond="$identifierForm->name!='email_address'" type="email"
+                        |cond="$identifierForm->name=='email_address'" name="user_{$identifierForm->name}"
+                        id="user_{$identifierForm->name}" value="" placeholder="" required/>
+                </div>
+            </div>
+
+            <div class="control-group p_r" id="user_pw_container">
+                <div class="form_tit p_a"><label for="password" class="control-label">회원 PW</label></div>
+                <div class="controls form_txt">
+                    <input type="password" name="user_password" id="user_password" class="password" value="" placeholder="6자 이상, 영문/숫자 포함" required onchange="removeActive(event)" onfocusout="chkUserPw(event)" onkeydown="error_remove(event)"/>
+                    <span class="help-inline" id="user_pw_error"></span>
+                    <img src="./layouts/Central_Server_2/asset/preview_icon.png" class="login_icon preview_icon p_a" alt="회원 PW 보기">
+                </div>
+            </div>
+
+            <div class="control-group p_r" id="user_pwchk_container">
+                <div class="form_tit p_a"><label for="password2" class="control-label">회원 PW 확인</label></div>
+                <div class="controls form_txt">
+                    <input type="password" name="user_password2" id="user_password2" class="password" value="" placeholder="입력해주세요" required onchange="removeActive(event)" onfocusout="chkUserPw(event)" onkeydown="error_remove(event)"/>
+                    <span class="help-inline" id="user_pwchk_error"></span>
+                    <img src="./layouts/Central_Server_2/asset/preview_icon.png" class="login_icon preview_icon p_a" alt="회원 PW 확인 보기">
+                </div>
+            </div>
+
+            <div class="user_agreement" style="border:none; display:none;" loop="$member_config->agreements => $i, $agreement" cond="$agreement->type !== 'disabled'">
+                <div class="confirm check_box">
+                    <label for="accept_agreement_{$i}">
+                        <input type="checkbox" name="accept_agreement[{$i}]" value="Y" id="user_accept_agreement_{$i}" style="display: none;" />
+                        <span class="check_icon"></span><b>서비스 이용약관</b>과 <b>개인정보 수집&nbsp;&period;&nbsp;이용&nbsp;&period;&nbsp;보관</b>에 동의합니다.
+                    </label>
+                </div>
+                <span style="margin-left: 1.5rem" class="help-inline" id="user_agree_error"></span>
+            </div>
+
+            <div class="user_btnArea" style="display: none;">
+                <div class="form_txt">
+                    <input type="button" value="다음 단계" class="btn btn-inverse pull-right form-button-re right" id="user_second_btn"/>
+                </div>
+            </div> -->
+        </div>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+    <!-- STEP3 -->
+    <div class="register_wrapper d-flex p_r">
+
+        <div class="logo"><img src="../img/logo1.png" alt="로고"></div>
+        <img src="./layouts/Central_Server_2/asset/back_btn-left.png" class="arrow_btn p_a" alt=""></img>
+        <div class="card-top">
+            <h1 class="cont_tit">회원가입</h1>
+            <p class="cont_txt">안녕하세요!<br />도입하기 앞서 아래 정보를 입력해주세요 :&rpar;</p>
+        </div>
+        
+        <div cond="$XE_VALIDATOR_MESSAGE && $XE_VALIDATOR_ID == 'modules/member/skins'"
+            class="message {$XE_VALIDATOR_MESSAGE_TYPE}">
+            <p>{$XE_VALIDATOR_MESSAGE}</p>
+        </div>
+
+        <div class="step_num">3/3</div>
+
+            
+        <div class="register_container">
+            <div class="control-group p_r" id="meet_name_container">
+                <div class="form_tit p_a"><label for="meet_name" class="control-label">모임명</label></div>
+                <div class="controls form_txt">
+                    <input type="text" name="meet_name" id="meet_name" value="" placeholder="모임명을 입력해주세요 (20자 이내)" onfocusin="focusIn(event)" onchange="removeActive(event)" required onfocusout="chkMeetName(event)" onkeydown="error_remove(event)" maxlength="20"/>
+                    <i class="fa-solid fa-check" id="meetname_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_mn_error"></span>
+                </div>
+            </div>
+
+            <div class="control-group p_r" id="meet_id_container">
+                <div class="form_tit p_a"><label for="meet_id" class="control-label">모임 ID</label></div>
+                <div class="controls form_txt">
+                    <input autofocus type="text" name="meet_id" id="meet_id" value="" placeholder="입력하신 모임 ID는 홈페이지 기본 도메인으로 사용됩니다." onfocusin="focusIn(event)" onchange="removeActive(event)" onfocusout="chkMeetId(event)" required onkeydown="error_remove(event)" minlength="2" maxlength="12"/>
+                    <i class="fa-solid fa-check" id="meetid_correct" style="display: none;"></i>
+                    <span class="help-inline" id="rep_mi_error"></span>
+                </div>
+            </div>
+
+            <div class="control-group p_r" id="meet_category_container">
+                <div class="form_tit p_a"><label for="meet_category" class="control-label">모임 분류</label></div>
+                <div class="controls form_txt">
+                    <select name="meet_category" id="meet_category" required onfocusout="chkSelect(event)" onfocusin="focusIn(event)" onchange="removeActive(event)" onclick="error_remove(event)">
+                        <option value="0" disabled hidden selected >선택해주세요.</option>
+                        <option value="단체">단체</option>
+                        <option value="동아리">동아리</option>
+                        <option value="소모임">소모임</option>
+                        <option value="기타">기타</option>
+                    </select>
+                    <span class="help-inline" id="rep_mc_error"></span>
+                </div>
+            </div>
+
+            <div class="agreement" style="border:none" loop="$member_config->agreements => $i, $agreement" cond="$agreement->type !== 'disabled'">
+                <div class="confirm check_box">
+                    <label class="d-flex align-items-center" for="accept_agreement_{$i}">
+                        <input type="checkbox" name="accept_agreement[{$i}]" value="Y" id="accept_agreement_{$i}" style="display: none;" />
+                        <img src="./layouts/Central_Server_2/asset/none_chk.svg" class="chk_btn" alt="all_chk"><b>서비스 이용약관</b>과 <b>개인정보 수집<!--&nbsp;&period;&nbsp;이용&nbsp;&period;&nbsp;보관--></b>에 동의합니다.
+                    </label>
+                </div>
+                <span style="margin-left: 1.5rem" class="help-inline" id="rep_agree_error"></span>
+            </div>
+
+            <div class="active_btn btnArea" id="third_btnArea" style="margin-top: 1rem;">
+                <div class="form_txt">
+                    <input type="button" value="등록" class="btn btn-inverse pull-right form-button-re right" id="third_btn"/>
+                </div>
+            </div>
+        </div>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+    <div class="b_bg"></div>
+
+    <div class="terms_container">
+        <img src="./layouts/Central_Server_2/asset/close_btn.png" class="close_btn" id="terms_remove" />
+        <div class="logo"><img src="../img/logo1.png" alt="로고"></div>
+        <h1 class="cont_tit">개인정보취급방침</h1>
+        <div class="terms_content">
+            제1조(목적)<br/>
+            주식회사 모밋(이하 ‘회사'라고 함)는 회사가 제공하고자 하는 서비스(이하 ‘회사 서비스’)를 이용하는 개인(이하 ‘이용자’ 또는 ‘개인’)의 정보(이하 ‘개인정보’)를 보호하기 위해, 개인정보보호법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 '정보통신망법') 등 관련 법령을 준수하고, 서비스 이용자의 개인정보 보호 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보처리방침(이하 ‘본 방침’)을 수립합니다.<br/>
+            <br/>
+            제2조(개인정보 처리의 원칙)<br/>
+            개인정보 관련 법령 및 본 방침에 따라 회사는 이용자의 개인정보를 수집할 수 있으며 수집된 개인정보는 개인의 동의가 있는 경우에 한해 제3자에게 제공될 수 있습니다. 단, 법령의 규정 등에 의해 적법하게 강제되는 경우 회사는 수집한 이용자의 개인정보를 사전에 개인의 동의 없이 제3자에게 제공할 수도 있습니다.<br/>
+            <br/>
+            제3조(본 방침의 공개)<br/>
+            ① 회사는 이용자가 언제든지 쉽게 본 방침을 확인할 수 있도록 회사 홈페이지 첫 화면 또는 첫 화면과의 연결화면을 통해 본 방침을 공개하고 있습니다.<br/>
+            ② 회사는 제1항에 따라 본 방침을 공개하는 경우 글자 크기, 색상 등을 활용하여 이용자가 본 방침을 쉽게 확인할 수 있도록 합니다.<br/>
+            <br/>
+            제4조(본 방침의 변경)<br/>
+            ① 본 방침은 개인정보 관련 법령, 지침, 고시 또는 정부나 회사 서비스의 정책이나 내용의 변경에 따라 개정될 수 있습니다.<br/>
+            ② 회사는 제1항에 따라 본 방침을 개정하는 경우 다음 각 호 하나 이상의 방법으로 공지합니다.<br/>
+            1. 회사가 운영하는 인터넷 홈페이지의 첫 화면의 공지사항란 또는 별도의 창을 통하여 공지하는 방법<br/>
+            2. 서면·모사전송·전자우편 또는 이와 비슷한 방법으로 이용자에게 공지하는 방법<br/>
+            ③ 회사는 제2항의 공지는 본 방침 개정의 시행일로부터 최소 7일 이전에 공지합니다. 다만, 이용자 권리의 중요한 변경이 있을 경우에는 최소 30일 전에 공지합니다.<br/>
+            <br/>
+            제5조(회원 가입을 위한 정보)<br/>
+            회사는 이용자의 회사 서비스에 대한 회원가입을 위하여 다음과 같은 정보를 수집합니다.<br/>
+            1. 필수 수집 정보: 이메일 주소, 비밀번호, 이름, 닉네임, 생년월일 및 휴대폰 번호<br/>
+            2. 선택 수집 정보: 프로필 사진 <br/>
+            <br/>
+            제6조(회사 서비스 제공을 위한 정보)<br/>
+            회사는 이용자에게 회사의 서비스를 제공하기 위하여 다음과 같은 정보를 수집합니다.<br/>
+            1. 필수 수집 정보: 아이디, 이메일 주소, 이름 및 생년월일<br/>
+            <br/>
+            제7조(개인정보 수집 방법)<br/>
+            회사는 다음과 같은 방법으로 이용자의 개인정보를 수집합니다.<br/>
+            1. 이용자가 회사의 홈페이지에 자신의 개인정보를 입력하는 방식<br/>
+            2. 어플리케이션 등 회사가 제공하는 홈페이지 외의 서비스를 통해 이용자가 자신의 개인정보를 입력하는 방식<br/>
+            <br/>
+            제8조(개인정보의 이용)<br/>
+            회사는 개인정보를 다음 각 호의 경우에 이용합니다.<br/>
+            1. 공지사항의 전달 등 회사의 운영에 필요한 경우<br/>
+            2. 이용문의에 대한 회신, 불만의 처리 등 이용자에 대한 서비스 개선을 위한 경우<br/>
+            3. 회사의 서비스를 제공하기 위한 경우<br/>
+            4. 개인정보 및 관심에 기반한 이용자간 관계의 형성을 위한 경우<br/>
+            <br/>
+            제9조(개인정보의 보유 및 이용기간)<br/>
+            ① 회사는 이용자의 개인정보에 대해 개인정보의 수집·이용 목적이 달성을 위한 기간 동안 개인정보를 보유 및 이용합니다.<br/>
+            ② 전항에도 불구하고 회사는 내부 방침에 의해 서비스 부정이용기록은 부정 가입 및 이용 방지를 위하여 회원 탈퇴 시점으로부터 최대 1년간 보관합니다.<br/>
+            <br/>
+            제10조(법령에 따른 개인정보의 보유 및 이용기간)<br/>
+            회사는 관계법령에 따라 다음과 같이 개인정보를 보유 및 이용합니다.<br/>
+            1. 전자상거래 등에서의 소비자보호에 관한 법률에 따른 보유정보 및 보유기간<br/>
+            - 계약 또는 청약철회 등에 관한 기록 : 5년<br/>
+            - 대금결제 및 재화 등의 공급에 관한 기록 : 5년<br/>
+            - 소비자의 불만 또는 분쟁처리에 관한 기록 : 3년<br/>
+            - 표시•광고에 관한 기록 : 6개월<br/>
+            2. 통신비밀보호법에 따른 보유정보 및 보유기간<br/>
+            - 웹사이트 로그 기록 자료 : 3개월<br/>
+            3. 전자금융거래법에 따른 보유정보 및 보유기간<br/>
+            - 전자금융거래에 관한 기록 : 5년<br/>
+            4. 위치정보의 보호 및 이용 등에 관한 법률<br/>
+            - 개인위치정보에 관한 기록 : 6개월<br/>
+            <br/>
+            제11조(개인정보의 파기원칙)<br/>
+            회사는 원칙적으로 이용자의 개인정보 처리 목적의 달성, 보유·이용기간의 경과 등 개인정보가 필요하지 않을 경우에는 해당 정보를 지체 없이 파기합니다.<br/>
+            <br/>
+            제12조(서비스 미이용자에 대한 개인정보처리)<br/>
+            ① 회사는 1년 동안 회사의 서비스를 이용하지 않은 이용자의 개인정보는 원칙적으로 이용자에게 사전통지하고 개인정보를 파기하거나 별도로 분리하여 저장합니다.<br/>
+            ② 회사는 장기 미이용 이용자의 개인정보는 별도로 분리되어 안전하게 보관하게 되며, 해당 이용자의 통지는 분리 보관 처리 일을 기준으로 최소 30일 이전에 전자우편주소로 전송됩니다.<br/>
+            ③ 장기 미이용 이용자는 회사가 미이용자 DB를 별도로 분리하기 전에 계속 서비스를 이용하고자 하는 경우 웹사이트(이하‘모바일앱’ 포함)에 로그인하시면 됩니다.<br/>
+            ④ 장기 미이용 이용자는 웹사이트에 로그인할 경우 이용자의 동의에 따라 본인의 계정을 복원할 수 있습니다.<br/>
+            ⑤ 회사는 분리 보관된 개인정보를 1년간 보관 후 지체없이 파기합니다.<br/>
+            <br/>
+            제13조(개인정보파기절차)<br/>
+            ① 이용자가 회원가입 등을 위해 입력한 정보는 개인정보 처리 목적이 달성된 후 별도의 DB로 옮겨져(종이의 경우 별도의 서류함) 내부 방침 및 기타 관련 법령에 의한 정보보호 사유에 따라(보유 및 이용기간 참조) 일정 기간 저장된 후 파기 되어집니다.<br/>
+            ② 회사는 파기 사유가 발생한 개인정보를 개인정보보호 책임자의 승인절차를 거쳐 파기합니다.<br/>
+            <br/>
+            제14조(개인정보파기방법)<br/>
+            회사는 전자적 파일형태로 저장된 개인정보는 기록을 재생할 수 없는 기술적 방법을 사용하여 삭제하며, 종이로 출력된 개인정보는 분쇄기로 분쇄하거나 소각 등을 통하여 파기합니다.<br/>
+            <br/>
+            제15조(광고정보의 전송 조치)<br/>
+            ① 회사는 전자적 전송매체를 이용하여 영리목적의 광고성 정보를 전송하는 경우 이용자의 명시적인 사전동의를 받습니다. 다만, 다음 각호 어느 하나에 해당하는 경우에는 사전 동의를 받지 않습니다<br/>
+            1. 회사가 재화 등의 거래관계를 통하여 수신자로부터 직접 연락처를 수집한 경우, 거래가 종료된 날로부터 6개월 이내에 회사가 처리하고 수신자와 거래한 것과 동종의 재화 등에 대한 영리목적의 광고성 정보를 전송하려는 경우<br/>
+            2. 「방문판매 등에 관한 법률」에 따른 전화권유판매자가 육성으로 수신자에게 개인정보의 수집출처를 고지하고 전화권유를 하는 경우<br/>
+            ② 회사는 전항에도 불구하고 수신자가 수신거부의사를 표시하거나 사전 동의를 철회한 경우에는 영리목적의 광고성 정보를 전송하지 않으며 수신거부 및 수신동의 철회에 대한 처리 결과를 알립니다.<br/>
+            ③ 회사는 오후 9시부터 그다음 날 오전 8시까지의 시간에 전자적 전송매체를 이용하여 영리목적의 광고성 정보를 전송하는 경우에는 제1항에도 불구하고 그 수신자로부터 별도의 사전 동의를 받습니다.<br/>
+            ④ 회사는 전자적 전송매체를 이용하여 영리목적의 광고성 정보를 전송하는 경우 다음 각 호의 사항 등을 광고성 정보에 구체적으로 밝힙니다.<br/>
+            3. 회사명 및 연락처<br/>
+            4. 수신의 거부 또는 수신동의의 철회 의사표시에 관한 사항의 표시<br/>
+            ⑤ 회사는 전자적 전송매체를 이용하여 영리목적의 광고성 정보를 전송하는 경우 다음 각 호의 어느 하나에 해당하는 조치를 하지 않습니다.<br/>
+            5. 광고성 정보 수신자의 수신거부 또는 수신동의의 철회를 회피·방해하는 조치<br/>
+            6. 숫자·부호 또는 문자를 조합하여 전화번호·전자우편주소 등 수신자의 연락처를 자동으로 만들어 내는 조치<br/>
+            7. 영리목적의 광고성 정보를 전송할 목적으로 전화번호 또는 전자우편주소를 자동으로 등록하는 조치<br/>
+            8. 광고성 정보 전송자의 신원이나 광고 전송 출처를 감추기 위한 각종 조치<br/>
+            9. 영리목적의 광고성 정보를 전송할 목적으로 수신자를 기망하여 회신을 유도하는 각종 조치<br/>
+            <br/>
+            제16조(개인정보 조회 및 수집동의 철회)<br/>
+            ① 이용자 및 법정 대리인은 언제든지 등록되어 있는 자신의 개인정보를 조회하거나 수정할 수 있으며 개인정보수집 동의 철회를 요청할 수 있습니다.<br/>
+            ② 이용자 및 법정 대리인은 자신의 가입정보 수집 등에 대한 동의를 철회하기 위해서는 개인정보보호책임자 또는 담당자에게 서면, 전화 또는 전자우편주소로 연락하시면 회사는 지체 없이 조치하겠습니다.<br/>
+            <br/>
+            제17조(개인정보 정보변경 등)<br/>
+            ① 이용자는 회사에게 전조의 방법을 통해 개인정보의 오류에 대한 정정을 요청할 수 있습니다.<br/>
+            ② 회사는 전항의 경우에 개인정보의 정정을 완료하기 전까지 개인정보를 이용 또는 제공하지 않으며 잘못된 개인정보를 제3자에게 이미 제공한 경우에는 정정 처리결과를 제3자에게 지체 없이 통지하여 정정이 이루어지도록 하겠습니다.<br/>
+            <br/>
+            제18조(이용자의 의무)<br/>
+            ① 이용자는 자신의 개인정보를 최신의 상태로 유지해야 하며, 이용자의 부정확한 정보 입력으로 발생하는 문제의 책임은 이용자 자신에게 있습니다.<br/>
+            ② 타인의 개인정보를 도용한 회원가입의 경우 이용자 자격을 상실하거나 관련 개인정보보호 법령에 의해 처벌받을 수 있습니다.<br/>
+            ③ 이용자는 전자우편주소, 비밀번호 등에 대한 보안을 유지할 책임이 있으며 제3자에게 이를 양도하거나 대여할 수 없습니다.<br/>
+            <br/>
+            제19조(개인정보 유출 등에 대한 조치)<br/>
+            ① 회사는 개인정보의 분실·도난·유출(이하 "유출 등"이라 한다) 사실을 안 때에는 지체 없이 다음 각 호의 모든 사항을 해당 이용자에게 알리고 방송통신위원회 또는 한국인터넷진흥원에 신고합니다.<br/>
+            1. 유출 등이 된 개인정보 항목<br/>
+            2. 유출 등이 발생한 시점<br/>
+            3. 이용자가 취할 수 있는 조치<br/>
+            4. 정보통신서비스 제공자 등의 대응 조치<br/>
+            5. 이용자가 상담 등을 접수할 수 있는 부서 및 연락처<br/>
+            <br/>
+            제20조(개인정보 유출 등에 대한 조치의 예외)<br/>
+            회사는 전조에도 불구하고 이용자의 연락처를 알 수 없는 등 정당한 사유가 있는 경우에는 회사의 홈페이지에 30일 이상 게시하는 방법으로 전조의 통지를 갈음하는 조치를 취할 수 있습니다.<br/>
+            <br/>
+            제21조(이용자의 쿠키 설치 선택권)<br/>
+            ① 이용자는 쿠키 설치에 대한 선택권을 가지고 있습니다. 따라서 이용자는 웹브라우저에서 옵션을 설정함으로써 모든 쿠키를 허용하거나, 쿠키가 저장될 때마다 확인을 거치거나, 아니면 모든 쿠키의 저장을 거부할 수도 있습니다.<br/>
+            ② 다만, 쿠키의 저장을 거부할 경우에는 로그인이 필요한 회사의 일부 서비스는 이용에 어려움이 있을 수 있습니다.<br/>
+            <br/>
+            제22조(쿠키 설치 허용 지정 방법)<br/>
+            쿠키 설치 허용 여부를 지정하는 방법(Internet Explorer의 경우)은 다음과 같습니다.<br/>
+            가. [도구] 메뉴에서 [인터넷 옵션]을 선택합니다.<br/>
+            나. [개인정보 탭]을 클릭합니다.<br/>
+            다. [고급] 설정에서 설정하시면 됩니다.<br/>
+            <br/>
+            제23조(회사의 개인정보 보호 책임자 지정)<br/>
+            ① 회사는 이용자의 개인정보를 보호하고 개인정보와 관련한 불만을 처리하기 위하여 아래와 같이 관련 부서 및 개인정보 보호 책임자를 지정하고 있습니다.<br/>
+            가. 개인정보 보호 책임자<br/>
+            - 성명: 이상민<br/>
+            - 전화번호: 1688-7360<br/>
+            - 이메일: support@momit.co.kr<br/>
+            나. 개인정보 보호 담당자<br/>
+            - 담당부서: 사업개발부<br/>
+            - 담당자명: 이상민<br/>
+            - 전화번호: 1688-7360<br/>
+            - 이메일: support@momit.co.kr<br/>
+            ② 회사는 개인정보의 보호를 위해 개인정보보호 전담부서를 운영하고 있으며, 개인정보처리방침의 이행사항 및 담당자의 준수여부를 확인하여 문제가 발견될 경우 즉시 해결하고 바로 잡을 수 있도록 최선을 다하고 있습니다.<br/>
+            <br/>
+            부칙<br/>
+            제1조 본 방침은 2021. 11. 11.부터 시행됩니다.<br/>
+        </div>
+        <div class="active_btn consent_btn">동의하기</div>
+        <p class="consent_error d-none" id="use_error">스크롤을 모두 내리셔야 동의하기 버튼이 활성화 됩니다.</p>
+    </div>
+
+    <div class="register_wrapper d-flex p_r">
+
+        <div class="logo"><img src="../img/logo1.png" alt="로고"></div>
+
+        <div class="desc">
+            <div class="ico-bg"></div>
+            <h2>회원가입이 완료되었습니다.</h2>
+            <p>모운다와 함께 해주셔서 감사합니다.</p>
+        </div>
+        <div class="login-btn">
+            <a href="#" class="active_btn">로그인하기</a>
+        </div>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+</form>
+</div>
+
+
+<style>
+
+    .help-inline{
+        font-size: 14px;
+        color: red;
+        display:none;
+    }
+
+    input::placeholder{
+        color:red;
+    }
+
+    #meet_name::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #phone_number::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #chk_name::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #verify_code::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    
+    #input_email::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #user_phone_number::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #meet_id::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #chk_id::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #user_chk_id::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #password::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+    #password2::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+    
+
+     #user_password::placeholder{
+        color:#999999;
+        font-size: 14px;
+        text-align:left;
+    }
+
+</style>
+
+<!--<script>
+         // #meet_category에서 선택된 옵션 컬러 변경
+         $('#meet_category').change(function(){
+        $('#meet_category').css('color','#191919');
+    });
+</script>
+
+<script>
+    // var phone_ran_num = "";
+    // var is_accept = false;
+
+    // function focusIn(event){
+    //     $(event.target).css('border', '0.5px solid #2a9cdd');
+    //     $(event.target).css('boxShadow', '0px 0px 8px #2a9cdd');
+    // }
+    
+    // $('#terms_remove').on('click', ()=>{
+    //     $('.terms_container').css('display', 'none');
+    //     $('.b_bg').css('display', 'none');
+    // })
+
+    // $('.terms_content').on('scroll',()=>{
+    //     if($('.terms_content')[0].scrollHeight-50 <= $('.terms_content').scrollTop() + $('.terms_content').innerHeight()){
+    //         $('.consent_btn').addClass('active');
+    //         $('.consent_btn').css('opacity', 1);
+    //         $('.consent_btn').css('cursor', "pointer");
+    //     }
+
+    //     $('#use_error').css('display', 'none');
+    // })
+
+    // $('.consent_btn').on('click', ()=>{
+    //     if($('.consent_btn').hasClass('active')){
+    //         $('.terms_container').css('display', 'none');
+    //         $('#accept_agreement_0').attr("checked", true);
+    //         $('.chk_btn').attr('src', '/modules/member/skins/mounda_login/layouts/Central_Server_2/asset/chk_box.svg')
+    //         $('.b_bg').css('display', 'none');
+
+    //         if($('#meet_id').hasClass('active') && $('#meet_name').hasClass('active') && $('#meet_category').hasClass('active') && $('#accept_agreement_0').attr('checked')){
+    //             $('#third_btnArea').css('opacity', 1);
+    //         }else{
+    //             $('#third_btnArea').css('opacity', 0.5);
+    //         }
+    //     }else{
+    //         $('.terms_container').css('display', 'block');
+    //         $('.b_bg').css('display', 'block');
+    //         $('#use_error').css('display', 'block');
+    //     }
+    // })
+
+    // if($('input:radio[id="is_manager"]').is(':checked') == true){
+    //     $('#isManager').val('manager');
+    // }else if($('input:radio[id="is_user"]').is(':checked') == true){
+    //     $('#isManager').val('user');
+    // }
+
+    // $('#is_manager').on('click', ()=>{
+    //     $('#user_name_container').css('display', 'none');
+    //     $('#user_phone_container').css('display', 'none');
+    //     $('#user_email_container').css('display', 'none');
+    //     $('#user_id_container').css('display', 'none');
+    //     $('#user_pw_container').css('display', 'none');
+    //     $('#user_pwchk_container').css('display', 'none');
+    //     $('.user_agreement').css('display', 'none');
+    //     $('.user_btnArea').css('display', 'none');
+
+    //     $('#rep_name_container').css('display', 'block');
+    //     $('#rep_phone_container').css('display', 'block');
+    //     $('#rep_email_container').css('display', 'block');
+    //     $('#rep_id_container').css('display', 'block');
+    //     $('#rep_pw_container').css('display', 'block');
+    //     $('#rep_pwchk_container').css('display', 'block');
+        
+    //     $('.btnArea').css('display', 'block');
+
+    //     $('#isManager').val('manager');
+    // })
+
+    // $('#is_user').on('click', ()=>{
+    //     $('#rep_name_container').css('display', 'none');
+    //     $('#rep_phone_container').css('display', 'none');
+    //     $('#rep_email_container').css('display', 'none');
+    //     $('#rep_id_container').css('display', 'none');
+    //     $('#rep_pw_container').css('display', 'none');
+    //     $('#rep_pwchk_container').css('display', 'none');
+    //     $('.btnArea').css('display', 'none');
+
+    //     $('#user_name_container').css('display', 'block');
+    //     $('#user_phone_container').css('display', 'block');
+    //     $('#user_email_container').css('display', 'block');
+    //     $('#user_id_container').css('display', 'block');
+    //     $('#user_pw_container').css('display', 'block');
+    //     $('#user_pwchk_container').css('display', 'block');
+    //     $('.user_agreement').css('display', 'block');
+    //     $('.user_btnArea').css('display', 'block');
+
+    //     $('#isManager').val('user');
+    // })
+    
+    // function error_remove(event) {
+    //     $(event.target).next().css('display', 'none');
+    //     $(event.target).next().next().css('display', 'none');
+    //     $(event.target).parent().parent().css('border', '1px solid #e6e6e6');
+    //     $(event.target).parent().parent().css('marginBottom', '1rem');
+
+    //     $(event.target).css('border', '0.5px solid #2a9cdd');
+    //     $(event.target).css('boxShadow', '0px 0px 8px #2a9cdd');
+    // }
+
+    // $('.arrow_btn').eq(0).on('click', ()=>{
+    //     $('.register_wrapper').eq(0).css('display', 'block');
+    //     $('.register_wrapper').eq(1).css('display', 'none');
+    //     $('.register_wrapper').eq(2).css('display', 'none');
+    //     $('.register_wrapper').eq(3).css('display', 'none');
+    // })
+
+    // $('.arrow_btn').eq(1).on('click', ()=>{
+    //     $('.register_wrapper').eq(0).css('display', 'none');
+    //     $('.register_wrapper').eq(1).css('display', 'block');
+    //     $('.register_wrapper').eq(2).css('display', 'none');
+    //     $('.register_wrapper').eq(3).css('display', 'none');
+    // })
+
+    // function send_verification(){
+    //     var check_spc = /[\-]/g;
+    //     var check_blank = /[\s]/g;
+
+    //     if( $('#phone_number').val() == ""){
+    //         $('#rep_phone_error').text("전화번호가 입력되지 않았습니다.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+    //     }
+    //     else if(check_spc.test($('#phone_number').val())){
+    //         $('#rep_phone_error').text("'-'를 제외한 연락처를 입력해주세요.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#phone_number').val())){
+    //         $('#rep_phone_error').text("공백을 제외한 연락처를 입력해주세요.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if($('#phone_number').val() != ""){
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./modules/member/skins/mounda_login/dupl_proc.php",
+    //             async:false,
+    //             data: {
+    //                 phone_number: $('#phone_number').val()
+    //             },
+    //             success: function (response) {
+    //                 if(response != ''){
+    //                     $('#rep_phone_error').text(response);
+    //                     $('#rep_phone_error').css('display', 'inline-block');
+    //                     $('#rep_phone_error').css('borderTop', '1px solid red');
+    //                     $('#rep_phone_container').css('marginBottom', '2rem');
+
+    //                 }else{
+    //                     $('#rep_phone_error').css('display', 'none');
+    //                     $('#rep_phone_container').css('border', '1px solid #E6E6E6');
+    //                     $('#rep_phone_container').css('marginBottom', '1rem');
+
+    //                     phone_ran_num = "";
+
+    //                     for(let i=0; i<6; i++){
+    //                         phone_ran_num = phone_ran_num + String(Math.floor(Math.random()*10));
+    //                     }
+
+    //                     var msg = "인증번호 '" + phone_ran_num + "' 를 입력해주세요";
+    //                     $('.help-inline').css('display', 'none');
+
+    //                     $.ajax({
+    //                         type: "POST",
+    //                         url: "./layouts/Central_Server_2/proc/phone_verify_proc.php",
+    //                         data: {
+    //                             type: "phone_verify",
+    //                             changed_phone:$('#phone_number').val(),
+    //                             msg: msg
+    //                         },
+    //                         success: function (response) {
+
+    //                             if(response != "success"){
+    //                                 $('.verify_group').css('display', 'none');
+    //                                 $('#rep_phone_error').text(response);
+    //                                 $('#rep_phone_error').css('display', 'inline-block');
+    //                                 $('#rep_phone_error').css('borderTop', '1px solid red');
+    //                                 $('#rep_phone_container').css('marginBottom', '2rem');
+    //                             }else{
+    //                                 alert("인증번호가 발송되었습니다. \n유효시간내에 입력부탁드립니다.");
+    //                                 $('.verify_group').css('display', 'flex');
+    //                                 $('#verify_code').val('');
+
+    //                                 $('.verification').css('display', 'none');
+    //                                 $('.resend_btn').css('display', 'inline-block');
+    //                             }
+                                
+    //                         }
+    //                     });
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+        
+
+    // $('.register_wrapper').eq(0).css('display', 'block');
+
+    // $('.verification_accept').on('click', ()=>{
+    //     if(phone_ran_num == $('#verify_code').val()){
+    //         $('#phone_number').addClass('active');
+    //         $('#phone_chk').val($('#phone_number').val());
+
+    //         $('#rep_verify_error').css('display', 'inline-block');
+    //         $('#rep_verify_error').text("인증이 완료되었습니다.");
+    //         $('#rep_verify_error').css('color', "#00b2bd");
+    //         $('#rep_verify_error').css('borderTop','none');
+    //         $('#verify_correct').css('display', 'block');
+    //         $('.verify_group').css('marginBottom', '2rem');
+
+    //         $('#phone_correct').css('display', 'block');
+
+    //         $('.verification_accept_container').css('right', '12%');
+    //         $('.resend_btn').css('right', '10%');
+
+    //         $('#rep_phone_container').css('border', '1px solid #e6e6e6');
+    //         $('#rep_phone_container').css('marginBottom', '1rem');
+    //         $('#rep_phone_error').css('display', 'none');
+
+    //         if($('#chk_name').hasClass('active') && $('#phone_number').hasClass('active') && $('#input_email').hasClass('active')){
+    //             $('#first_btnArea').css('opacity', 1);
+    //         }else{
+    //             $('#first_btnArea').css('opacity', 0.5);
+    //         }
+    //     }
+
+    //     else if($('#verify_code').val() == ""){
+    //         $('#rep_verify_error').css('display', 'inline-block');
+    //         $('#rep_verify_error').text("인증번호를 입력해주세요.");
+    //         $('#rep_verify_error').css('color', "red");
+    //         $('#rep_verify_error').css('borderTop', '1px solid red');
+    //         $('.verify_group').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if(phone_ran_num != $('#verify_code').val()){
+    //         $('#rep_verify_error').css('display', 'inline-block');
+    //         $('#rep_verify_error').text("인증번호가 다릅니다.");
+    //         $('#rep_verify_error').css('color', "red");
+    //         $('#rep_verify_error').css('borderTop', '1px solid red');
+    //         $('.verify_group').css('marginBottom', '2rem');
+    //     }
+        
+    // });
+
+    // $('.user_verification_accept').on('click', ()=>{
+    //     if(email_ran_num == $('#user_verify_code').val()){
+    //         $('#user_input_email').addClass('active');
+    //         $('#user_email_address').val($('#user_input_email').val());
+
+    //         $('#user_verify_error').css('display', 'inline-block');
+    //         $('#user_verify_error').text("인증이 완료되었습니다.");
+    //         $('#user_verify_error').css('color', "#4c4cff");
+    //         $('.user_verify_group').css('border', '1px solid #4c4cff');
+    //         $('.user_verify_group').css('marginBottom', '2rem');
+
+    //         $('#user_email_container').css('border', '1px solid #e6e6e6');
+    //         $('#user_email_container').css('marginBottom', '1rem');
+    //         $('#user_email_error').css('display', 'none');
+    //     }
+
+    //     else if($('#user_verify_code').val() == ""){
+    //         $('#user_verify_error').css('display', 'inline-block');
+    //         $('#user_verify_error').text("인증번호를 입력해주세요.");
+    //         $('#user_verify_error').css('color', "#red");
+    //         $('#user_verify_error').css('borderTop', '1px solid red');
+    //         $('.user_verify_group').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if(email_ran_num != $('#user_verify_code').val()){
+    //         $('#user_verify_error').css('display', 'inline-block');
+    //         $('#user_verify_error').text("인증번호가 다릅니다.");
+    //         $('#user_verify_error').css('color', "#red");
+    //         $('#user_verify_error').css('borderTop', '1px solid red');
+    //         $('.user_verify_group').css('marginBottom', '2rem');
+    //     }
+        
+    // });
+
+    // function chkMeetName(event){
+    //     var check_blank = /[\s]/g;
+
+    //     focusInRemove(event);
+
+    //     if($(event.target).val() == ""){
+    //         $('#rep_mn_error').text("모임명을 입력해주세요.");
+    //         $('#rep_mn_error').css('display', 'inline-block');
+    //         $('#rep_mn_error').css('borderTop', '1px solid red');
+    //         $('#meet_name_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(check_blank.test($(event.target).val())){
+    //         $('#rep_mn_error').text("모임명에 공백이 입력되었습니다.");
+    //         $('#rep_mn_error').css('display', 'inline-block');
+    //         $('#rep_mn_error').css('borderTop', '1px solid red');
+    //         $('#meet_name_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if($(event.target).val() != ""){
+    //         $('#meet_name_container').css('border', '1px solid #e6e6e6')            ;
+    //         $('#meet_name_container').css('marginBottom', '1rem');
+    //         $('#rep_mn_error').css('display', 'none');
+    //         $('#meet_name').addClass('active');
+    //         $('#meetname_correct').css('display', 'block');
+    //     }
+
+    //     if($('#meet_id').hasClass('active') && $('#meet_name').hasClass('active') && $('#meet_category').hasClass('active') && $('#accept_agreement_0').attr('checked')){
+    //         $('#third_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#third_btnArea').css('opacity', 0.5);
+    //     }
+
+
+    // }
+
+    // function chkMeetId(event){
+    //     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\_[\];'",./`]/;
+    //     var check_eng = /[a-zA-Z]/;
+    //     var check_blank = /[\s]/g;
+    //     var first_char = $(event.target).val().charAt(0);
+    //     var id_length = $('#meet_id').val().length;
+
+    //     focusInRemove(event);
+        
+
+    //     if($(event.target).val() == ""){
+    //         $('#rep_mi_error').text("모임 아이디를 입력해주세요.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if( check_spc.test($('#meet_id').val()) || check.test($('#meet_id').val()) || $('#meet_id').val().includes('admin') ){
+    //         $('#rep_mi_error').text("아이디에 입력 불가능한 문자가 있습니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if(!check_eng.test(first_char) ){
+    //         $('#rep_mi_error').text("아이디의 첫 글자는 영문자여야 합니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#meet_id').val())){
+    //         $('#rep_mi_error').text("아이디에 공백이 입력되었습니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if(id_length < 2 || id_length > 12){
+    //         $('#rep_mi_error').text("아이디는 2-12자 이내로 입력되어야 합니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+    //     }else if($(event.target).val() != ""){
+
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./modules/member/skins/mounda_login/dupl_proc.php",
+    //             data: {
+    //                 meet_id: $('#meet_id').val()
+    //             },
+    //             async:false,
+    //             success: function (response) {
+    //                 if(response != ""){
+    //                     $('#rep_mi_error').text("이미 등록된 모임 아이디입니다.");
+    //                     $('#rep_mi_error').css('display', 'inline-block');
+    //                     $('#rep_mi_error').css('borderTop', '1px solid red');
+    //                     $('#meet_id_container').css('marginBottom', '2rem');
+
+    //                 }else{
+    //                     $('#rep_mi_error').css('display', 'none');
+    //                     $('#meet_id_container').css('border', '1px solid #e6e6e6');
+    //                     $('#meet_id_container').css('marginBottom', '1rem');
+    //                     $('#meet_id').addClass('active');
+    //                     $('#meetid_correct').css('display', 'block');
+    //                 }
+                    
+    //             }
+    //         });
+
+    //     }
+
+        
+    //     if($('#meet_id').hasClass('active') && $('#meet_name').hasClass('active') && $('#meet_category').hasClass('active') && $('#accept_agreement_0').attr('checked')){
+    //         $('#third_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#third_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // function chkName(event){
+    //     var check_blank = /[\s]/g;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\_[\];'",./`]/;
+
+    //     focusInRemove(event);
+
+    //     if( $(event.target).val() == "" ){
+    //         $('#rep_name_error').text("대표자명이 입력되지 않았습니다.");
+    //         $('#rep_name_error').css('display', 'inline-block');
+    //         $('#rep_name_error').css('borderTop', '1px solid red');
+    //         $('#rep_name_container').css('marginBottom', '2rem');
+    //         $('#chk_name').css('border', 'none');
+    //     }else if(check_blank.test($(event.target).val())){
+    //         $('#rep_name_error').text("대표자명에 공백이 입력되었습니다.");
+    //         $('#rep_name_error').css('display', 'inline-block');
+    //         $('#rep_name_error').css('borderTop', '1px solid red');
+    //         $('#rep_name_container').css('marginBottom', '2rem');
+    //         $('#chk_name').css('border', 'none');
+
+    //     }else if( check_spc.test($(event.target).val())){
+    //         $('#rep_name_error').text("대표자명에 입력 불가능한 문자가 있습니다.");
+    //         $('#rep_name_error').css('display', 'inline-block');
+    //         $('#rep_name_error').css('borderTop', '1px solid red');
+    //         $('#rep_name_container').css('marginBottom', '2rem');
+    //         $('#chk_name').css('border', 'none');
+
+    //     }else{
+    //         $('#rep_name_error').css('display', 'none');
+    //         $('#rep_name_container').css('border', '1px solid #E6E6E6');
+    //         $('#rep_name_container').css('marginBottom', '1rem');
+    //         $(event.target).addClass('active');
+    //         $('#name_correct').css('display', 'block');
+    //     }
+
+    //     if($('#chk_name').hasClass('active') && $('#phone_number').hasClass('active') && $('#input_email').hasClass('active')){
+    //         $('#first_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#first_btnArea').css('opacity', 0.5);
+    //     }
+        
+    // }
+
+    // function focusInRemove(event){
+    //     $(event.target).css('boxShadow', "none");
+    //     $(event.target).css('border', "none");
+    // }
+
+    // function chkUserName(event){
+    //     var check_blank = /[\s]/g;
+
+    //     if( $(event.target).val() == "" ){
+    //         $('#user_name_error').text("회원명이 입력되지 않았습니다.");
+    //         $('#user_name_error').css('display', 'inline-block');
+    //         $('#user_name_error').css('borderTop', '1px solid red');
+    //         $('#user_name_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($(event.target).val())){
+    //         $('#user_name_error').text("회원명에 공백이 입력되었습니다.");
+    //         $('#user_name_error').css('display', 'inline-block');
+    //         $('#user_name_error').css('borderTop', '1px solid red');
+    //         $('#user_name_container').css('marginBottom', '2rem');
+
+    //     }else{
+    //         $('#user_name_error').css('display', 'none');
+    //         $('#user_name_container').css('border', '1px solid #E6E6E6');
+    //         $('#user_name_container').css('marginBottom', '1rem');
+    //         $(event.target).addClass('active');
+    //     }
+        
+    // }
+
+    // function chkPhone(event){
+    //     focusInRemove(event);
+    //     var check_spc = /[\-]/g;
+    //     var check_blank = /[\s]/g;
+
+    //     if( $(event.target).val() == ""){
+    //         $('#rep_phone_error').text("전화번호가 입력되지 않았습니다.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+    //     }
+    //     else if(check_spc.test($(event.target).val())){
+    //         $('#rep_phone_error').text("'-'를 제외한 연락처를 입력해주세요.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($(event.target).val())){
+    //         $('#rep_phone_error').text("공백을 제외한 연락처를 입력해주세요.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if($(event.target).val() != ""){
+
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./modules/member/skins/mounda_login/dupl_proc.php",
+    //             async:false,
+    //             data: {
+    //                 phone_number: $('#phone_number').val()
+    //             },
+    //             success: function (response) {
+    //                 if(response != ''){
+    //                     $('#rep_phone_error').text(response);
+    //                     $('#rep_phone_error').css('display', 'inline-block');
+    //                     $('#rep_phone_error').css('borderTop', '1px solid red');
+    //                     $('#rep_phone_container').css('marginBottom', '2rem');
+
+    //                 }else{
+    //                     $('#rep_phone_error').css('display', 'none');
+    //                     $('#rep_phone_container').css('border', '1px solid #E6E6E6');
+    //                     $('#rep_phone_container').css('marginBottom', '1rem');
+    //                 }
+    //             }
+    //         });
+    //     }
+
+    //     if($('#chk_name').hasClass('active') && $('#phone_number').hasClass('active') && $('#input_email').hasClass('active')){
+    //         $('#first_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#first_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // function chkUserPhone(event){
+    //     var check_spc = /[\-]/g;
+    //     var check_blank = /[\s]/g;
+
+    //     if( $(event.target).val() == ""){
+    //         $('#user_phone_error').text("연락처가 입력되지 않았습니다.");
+    //         $('#user_phone_error').css('display', 'inline-block');
+    //         $('#user_phone_error').css('borderTop', '1px solid red');
+    //         $('#user_phone_container').css('marginBottom', '2rem');
+    //     }
+    //     else if(check_spc.test($(event.target).val())){
+    //         $('#user_phone_error').text("'-'를 제외한 전화번호를 입력해주세요.");
+    //         $('#user_phone_error').css('display', 'inline-block');
+    //         $('#user_phone_error').css('borderTop', '1px solid red');
+    //         $('#user_phone_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($(event.target).val())){
+    //         $('#user_phone_error').text("공백을 제외한 전화번호를 입력해주세요.");
+    //         $('#user_phone_error').css('display', 'inline-block');
+    //         $('#user_phone_error').css('borderTop', '1px solid red');
+    //         $('#user_phone_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if($(event.target).val() != ""){
+
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./modules/member/skins/mounda_login/dupl_proc.php",
+    //             async:false,
+    //             data: {
+    //                 phone_number: $('#user_phone_number').val()
+    //             },
+    //             success: function (response) {
+    //                 if(response != ''){
+    //                     $('#user_phone_error').text(response);
+    //                     $('#user_phone_error').css('display', 'inline-block');
+    //                     $('#user_phone_error').css('borderTop', '1px solid red');
+    //                     $('#user_phone_container').css('marginBottom', '2rem');
+
+    //                 }else{
+    //                     $('#user_phone_error').css('display', 'none');
+    //                     $('#user_phone_container').css('border', '1px solid #E6E6E6');
+    //                     $('#user_phone_container').css('marginBottom', '1rem');
+    //                     $(event.target).addClass('active');
+    //                 }
+    //             }
+    //         });
+
+
+    //     }
+    }
+
+    // function chkUserEmail(event){
+    //     var check_blank = /[\s]/g;
+        
+    //     if( $(event.target).val() == "" ){
+    //         $('#user_email_error').text("이메일이 입력되지 않았습니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($(event.target).val())){
+    //         $('#user_email_error').text("이메일에 공백이 입력되었습니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }else if($('#user_input_email').val() == $('#user_email_address').val()){
+    //         $('#user_email_error').css('display', 'none');
+    //         $('#user_email_container').css('border', '1px solid #e6e6e6');
+    //         $('#user_email_container').css('marginBottom', '1rem');
+    //         $('#user_input_email').addClass('active');
+    //     }else if( !$(event.target).hasClass('active') || $('#user_input_email').val != $('#user_email_address').val()){
+    //         $('#user_email_error').text("인증받지 않은 이메일입니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }
+    // }
+
+    // function chkEmail(event){
+    //     var check_blank = /[\s]/g;
+
+    //     focusInRemove(event);
+        
+    //     if(!$(event.target).val()){
+    //         $('#rep_email_error').text("이메일이 입력되지 않았습니다.");
+    //         $('#rep_email_error').css('display', 'inline-block');
+    //         $('#rep_email_error').css('borderTop', '1px solid red');
+    //         $('#rep_email_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($(event.target).val())){
+    //         $('#rep_email_error').text("이메일에 공백이 입력되었습니다.");
+    //         $('#rep_email_error').css('display', 'inline-block');
+    //         $('#rep_email_error').css('borderTop', '1px solid red');
+    //         $('#rep_email_container').css('marginBottom', '2rem');
+    //     }else{
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./layouts/Central_Server_2/proc/email_verify_proc.php",
+    //             data: {
+    //                 type: "email_chk",
+    //                 changed_email:$('#input_email').val()
+    //             },
+    //             success: function (response) {
+
+    //                 if(response == "이미 존재하는 메일 주소입니다. 다른 메일 주소를 입력해주세요."){
+    //                     $('#rep_email_error').text(response);
+    //                     $('#rep_email_error').css('display', 'inline-block');
+    //                     $('#rep_email_error').css('borderTop', '1px solid red');
+    //                     $('#rep_email_container').css('marginBottom', '2rem');
+    //                     $('#input_email').css('border', 'none');
+    //                 }else if(response == "변경하실 이메일 주소를 입력해주세요."){
+    //                     $('#rep_email_error').text("이메일이 입력되지 않았습니다.");
+    //                     $('#rep_email_error').css('display', 'inline-block');
+    //                     $('#rep_email_error').css('borderTop', '1px solid red');
+    //                     $('#rep_email_container').css('marginBottom', '2rem');
+    //                     $('#input_email').css('border', 'none');
+    //                 }else if(response == "이메일 형식이 올바르지 않습니다."){
+    //                     $('#rep_email_error').text(response);
+    //                     $('#rep_email_error').css('display', 'inline-block');
+    //                     $('#rep_email_error').css('borderTop', '1px solid red');
+    //                     $('#rep_email_container').css('marginBottom', '2rem');
+    //                     $('#input_email').css('border', 'none');
+    //                 }else{
+    //                     $('#rep_email_error').css('display', 'none');
+    //                     $('#rep_email_container').css('border', '1px solid #e6e6e6');
+    //                     $('#rep_email_container').css('marginBottom', '1rem');
+    //                     $('#input_email').addClass('active');
+
+    //                     $('#email_correct').css('display', 'block');
+    //                 }
+                    
+    //             }
+    //         });
+    //     }
+
+
+
+    //     if($('#chk_name').hasClass('active') && $('#phone_number').hasClass('active') && $('#input_email').hasClass('active')){
+    //         $('#first_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#first_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // function chkVerify(event){
+    //     focusInRemove(event);
+
+    //     if($(event.target).val() == ""){
+    //         $('#rep_verify_error').text("인증번호를 입력해주세요");
+    //         $('#rep_verify_error').css('display', 'inline-block');
+    //         $('#rep_verify_error').css('borderTop', '1px solid red');
+    //         $('.verify_group').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#chk_name').hasClass('active') && $('#phone_number').hasClass('active') && $('#input_email').hasClass('active')){
+    //         $('#first_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#first_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // function chkUserVerify(event){
+    //     if($(event.target).val() == ""){
+    //         $('#user_verify_error').text("인증번호를 입력해주세요");
+    //         $('#user_verify_error').css('display', 'inline-block');
+    //         $('#user_verify_error').css('borderTop', '1px solid red');
+    //         $('.user_verify_group').css('marginBottom', '2rem');
+    //     }
+    // }
+
+    // function removeActive(event){
+    //     $(event.target).removeClass('active');
+    // }
+
+
+    // $('#first_btn').on('click', ()=>{
+    //     var chk_name = $('#chk_name').hasClass('active');
+    //     var chk_phone = $('#phone_number').hasClass('active');
+    //     var chk_email = $('#input_email').hasClass('active');
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\[\]_;'",./`]/;
+    //     var check_blank = /[\s]/g;
+
+
+    //     if( $('#chk_name').val() == "" ){
+    //         $('#rep_name_error').text("대표자명이 입력되지 않았습니다.");
+    //         $('#rep_name_error').css('display', 'inline-block');
+    //         $('#rep_name_error').css('borderTop', '1px solid red');
+    //         $('#rep_name_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($('#chk_name').val())){
+    //         $('#rep_name_error').text("대표자명에 공백이 입력되었습니다.");
+    //         $('#rep_name_error').css('display', 'inline-block');
+    //         $('#rep_name_error').css('borderTop', '1px solid red');
+    //         $('#rep_name_container').css('marginBottom', '2rem');
+
+    //     }
+
+    //     if(!$('#input_email').val()){
+    //         $('#rep_email_error').text("이메일이 입력되지 않았습니다.");
+    //         $('#rep_email_error').css('display', 'inline-block');
+    //         $('#rep_email_error').css('borderTop', '1px solid red');
+    //         $('#rep_email_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($('#input_email').val())){
+    //         $('#rep_email_error').text("이메일에 공백이 입력되었습니다.");
+    //         $('#rep_email_error').css('display', 'inline-block');
+    //         $('#rep_email_error').css('borderTop', '1px solid red');
+    //         $('#rep_email_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if( $('#phone_number').val() == ""){
+    //         $('#rep_phone_error').text("전화번호가 입력되지 않았습니다.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+    //     }
+    //     else if(check_spc.test($('#phone_number').val())){
+    //         $('#rep_phone_error').text("'-'를 제외한 연락처를 입력해주세요.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#phone_number').val())){
+    //         $('#rep_phone_error').text("공백을 제외한 연락처를 입력해주세요.");
+    //         $('#rep_phone_error').css('display', 'inline-block');
+    //         $('#rep_phone_error').css('borderTop', '1px solid red');
+    //         $('#rep_phone_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#chk_name').hasClass('active') && $('#phone_number').hasClass('active') && $('#input_email').hasClass('active')){
+    //         $('#first_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#first_btnArea').css('opacity', 0.5);
+    //     }
+
+    //     if(chk_name && chk_phone && chk_email){
+    //         $('#rep_name').val($('#chk_name').val());
+    //         $('#phone_number').val($('#phone_number').val());
+    //         $('#email_address').val($('#input_email').val());
+
+    //         $('.register_wrapper').eq(0).css('display', 'none');
+    //         $('.register_wrapper').eq(1).css('display', 'block');
+    //         $('.register_wrapper').eq(2).css('display', 'none');
+    //         $('.register_wrapper').eq(3).css('display', 'none');
+    //     }
+        
+    
+    // })
+
+    // $('#user_first_btn').on('click', ()=>{
+    //     var chk_name = $('#user_chk_name').hasClass('active');
+    //     var chk_phone = $('#user_phone_number').hasClass('active');
+    //     var chk_email = $('#user_input_email').hasClass('active');
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\[\]_;'",./`]/;
+    //     var check_blank = /[\s]/g;
+
+    //     if( $('#user_chk_name').val() == "" ){
+    //         $('#user_name_error').text("회원명이 입력되지 않았습니다.");
+    //         $('#user_name_error').css('display', 'inline-block');
+    //         $('#user_name_error').css('borderTop', '1px solid red');
+    //         $('#user_name_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($('#user_chk_name').val())){
+    //         $('#user_name_error').text("회원명에 공백이 입력되었습니다.");
+    //         $('#user_name_error').css('display', 'inline-block');
+    //         $('#user_name_error').css('borderTop', '1px solid red');
+    //         $('#user_name_container').css('marginBottom', '2rem');
+
+    //     }
+
+    //     if( $('#user_phone_number').val() == ""){
+    //         $('#user_phone_error').text("연락처가 입력되지 않았습니다.");
+    //         $('#user_phone_error').css('display', 'inline-block');
+    //         $('#user_phone_error').css('borderTop', '1px solid red');
+    //         $('#user_phone_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if(check_spc.test($('#user_phone_number').val())){
+    //         $('#user_phone_error').text("'-'를 제외한 전화번호를 입력해주세요.");
+    //         $('#user_phone_error').css('display', 'inline-block');
+    //         $('#user_phone_error').css('borderTop', '1px solid red');
+    //         $('#user_phone_container').css('marginBottom', '2rem');
+
+    //     }
+        
+    //     else if(check_blank.test($('#user_phone_number').val())){
+    //         $('#user_phone_error').text("공백을 제외한 전화번호를 입력해주세요.");
+    //         $('#user_phone_error').css('display', 'inline-block');
+    //         $('#user_phone_error').css('borderTop', '1px solid red');
+    //         $('#user_phone_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if( $('#user_input_email').val() == "" ){
+    //         $('#user_email_error').text("이메일이 입력되지 않았습니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }else if(check_blank.test($('#user_input_email').val())){
+    //         $('#user_email_error').text("이메일에 공백이 입력되었습니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }else if( !$('#user_input_email').hasClass('active') ){
+    //         $('#user_email_error').text("인증받지 않은 이메일입니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#user_verify_code').val() == ""){
+    //         $('#user_verify_error').text("인증번호를 입력해주세요");
+    //         $('#user_verify_error').css('display', 'inline-block');
+    //         $('#user_verify_error').css('borderTop', '1px solid red');
+    //         $('.user_verify_group').css('marginBottom', '2rem');
+
+    //     }else if(!$('#user_input_email').hasClass('active')){
+    //         $('#user_verify_error').css('display', 'inline-block');
+    //         $('#user_verify_error').text("인증확인을 버튼을 눌러주세요.");
+    //         $('#user_verify_error').css('color', "#red");
+    //         $('#user_verify_error').css('borderTop', '1px solid red');
+    //         $('.user_verify_group').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#user_input_email').val() != $('#user_email_address').val()){
+    //         $('#user_email_error').text("인증받지 않은 이메일입니다.");
+    //         $('#user_email_error').css('display', 'inline-block');
+    //         $('#user_email_error').css('borderTop', '1px solid red');
+    //         $('#user_email_container').css('marginBottom', '2rem');
+    //     }else if(chk_name == true && chk_phone == true && chk_email){
+    //         $('#rep_name').val($('#user_chk_name').val());
+    //         $('#phone_number').val($('#user_phone_number').val());
+    //         $('#email_address').val($('#user_input_email').val());
+
+    //         $('.register_wrapper').eq(0).css('display', 'none');
+    //         $('.register_wrapper').eq(1).css('display', 'block');
+    //         $('.register_wrapper').eq(2).css('display', 'none');
+    //         $('.register_wrapper').eq(3).css('display', 'none');
+    //     }
+    
+    // })
+
+    // $('#second_btn').on('click', ()=>{
+    //     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\[\]_;'",./`]/;
+    //     var check_eng = /[a-zA-Z]/g;
+    //     var check_blank = /[\s]/g;
+    //     var check_num = /[0-9]/g;
+    //     var first_char = $('#chk_id').val().charAt(0);
+    //     var id_length = $('#chk_id').val().length;
+    //     var pw_length = $('#password').val().length;
+
+        
+
+    //     if($('#chk_id').val() == ""){
+    //         $('#rep_id_error').text("아이디를 입력해주세요.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if( check_spc.test($('#chk_id').val()) || check.test($('#chk_id').val()) || $('#chk_id').val().includes('admin') ){
+    //         $('#rep_id_error').text("아이디에 입력 불가능한 문자가 있습니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+    //     }else if(!check_eng.test(first_char) ){
+    //         $('#rep_id_error').text("아이디의 첫 글자는 영문자여야 합니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#chk_id').val())){
+    //         $('#rep_id_error').text("아이디에 공백이 입력되었습니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if(id_length < 6 || id_length > 12){
+    //         $('#rep_id_error').text("아이디는 6-12자 이내로 입력되어야 합니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#password').val() == ""){
+    //         $('#rep_pw_error').text("비밀번호를 입력 해주세요.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+    //     }else if(pw_length < 6){
+    //         $('#rep_pw_error').text("비밀번호 6자리 이상 입력 해주세요.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#password').val())){
+    //         $('#rep_pw_error').text("비밀번호에 공백이 포함되어 있습니다.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(!check_eng.test($('#password').val()) || !check_num.test($('#password').val())){
+    //         $('#rep_pw_error').text("영문 그리고 숫자가 포함되어야 합니다.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if($('#password2').val() == ""){
+    //         $('#rep_pwchk_error').text("비밀번호를 한번 더 입력 해주세요.");
+    //         $('#rep_pwchk_error').css('display', 'inline-block');
+    //         $('#rep_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#rep_pwchk_container').css('marginBottom', '2rem');
+
+
+    //     }else if($('#password').val() != $('#password2').val()){
+    //         $('#rep_pwchk_error').text("비밀번호가 서로 일치하지 않습니다.");
+    //         $('#rep_pwchk_error').css('display', 'inline-block');
+    //         $('#rep_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#rep_pwchk_container').css('marginBottom', '2rem');
+
+    //     }
+
+    //     if($('#chk_id').hasClass('active') && $('#password').hasClass('active') && $('#password2').hasClass('active')){
+    //         $('.register_wrapper').eq(0).css('display', 'none');
+    //         $('.register_wrapper').eq(1).css('display', 'none');
+    //         $('.register_wrapper').eq(2).css('display', 'block');
+    //         $('.register_wrapper').eq(3).css('display', 'none');
+    //     }
+
+    //     if($('#chk_id').hasClass('active') && $('#password').hasClass('active') && $('#password2').hasClass('active')){
+    //         $('#second_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#second_btnArea').css('opacity', 0.5);
+    //     }
+        
+        
+    // })
+
+    // $('#user_second_btn').on('click', ()=>{
+    //     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\[\]_;'",./`]/;
+    //     var check_eng = /[a-zA-Z]/g;
+    //     var check_blank = /[\s]/g;
+    //     var check_num = /[0-9]/g;
+    //     var first_char = $('#user_chk_id').val().charAt(0);
+    //     var id_length = $('#user_chk_id').val().length;
+    //     var pw_length = $('#user_password').val().length;
+    //     var chk_agree = $('#user_accept_agreement_0').attr('checked');
+
+    //     if($('#user_chk_id').val() == ""){
+    //         $('#user_id_error').text("아이디를 입력해주세요.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if( check_spc.test($('#user_chk_id').val()) || check.test($('#user_chk_id').val()) || $('#user_chk_id').val().includes('admin') ){
+    //         $('#user_id_error').text("아이디에 입력 불가능한 문자가 있습니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+    //     }else if(!check_eng.test(first_char) ){
+    //         $('#user_id_error').text("아이디의 첫 글자는 영문자여야 합니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#user_chk_id').val())){
+    //         $('#user_id_error').text("아이디에 공백이 입력되었습니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if(id_length < 6 || id_length > 12){
+    //         $('#user_id_error').text("아이디는 6-12자 이내로 입력되어야 합니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#user_password').val() == ""){
+    //         $('#user_pw_error').text("비밀번호를 입력 해주세요.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+    //     }else if(pw_length < 6){
+    //         $('#user_pw_error').text("비밀번호 6자리 이상 입력 해주세요.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#user_password').val())){
+    //         $('#user_pw_error').text("비밀번호에 공백이 포함되어 있습니다.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(!check_eng.test($('#user_password').val()) || !check_num.test($('#user_password').val())){
+    //         $('#user_pw_error').text("영문 그리고 숫자가 포함되어야 합니다.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if($('#user_password2').val() == ""){
+    //         $('#user_pwchk_error').text("비밀번호를 한번 더 입력 해주세요.");
+    //         $('#user_pwchk_error').css('display', 'inline-block');
+    //         $('#user_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#user_pwchk_container').css('marginBottom', '2rem');
+
+
+    //     }else if($('#user_password').val() != $('#user_password2').val()){
+    //         $('#user_pwchk_error').text("비밀번호가 서로 일치하지 않습니다.");
+    //         $('#user_pwchk_error').css('display', 'inline-block');
+    //         $('#user_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#user_pwchk_container').css('marginBottom', '2rem');
+
+    //     }
+
+    //     if(!$('#user_accept_agreement_0').attr('checked')){
+    //         $('#user_agree_error').text("이용약관을 확인한 후, 동의해주세요");
+    //         $('#user_agree_error').css('display', 'inline-block');
+    //     }
+
+    //     if($('#user_chk_id').hasClass('active') && $('#user_password').hasClass('active') && $('#user_password2').hasClass('active') && chk_agree == 'checked'){
+    //         $('#user_id').val($('#user_chk_id').val());
+    //         $('#password').val($('#user_password').val());
+    //         $('.register_wrapper').eq(0).css('display', 'none');
+    //         $('.register_wrapper').eq(1).css('display', 'none');
+    //         $('.register_wrapper').eq(2).css('display', 'none');
+    //         $('.register_wrapper').eq(3).css('display', 'block');
+
+    //         $('#meet_name').val('-');
+    //         $('#meet_id').val('-');
+    //         $('#meet_category').val('-');
+    //     }
+        
+        
+    // })
+
+    // function chkId(event){
+    //     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\[\];_'",./`]/;
+    //     var check_eng = /[a-zA-Z]/;
+    //     var check_blank = /[\s]/g;
+    //     var first_char = $(event.target).val().charAt(0);
+    //     var id_length = $('#chk_id').val().length;
+
+    //     focusInRemove(event);
+
+    //     if($('#chk_id').val() == ""){
+    //         $('#rep_id_error').text("아이디를 입력해주세요.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_spc.test($('#chk_id').val()) || check.test($('#chk_id').val()) || $('#chk_id').val().includes('admin') ){
+    //         $('#rep_id_error').text("아이디에 입력 불가능한 문자가 있습니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if(!check_eng.test(first_char) ){
+    //         $('#rep_id_error').text("아이디의 첫 글자는 영문자여야 합니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#chk_id').val())){
+    //         $('#rep_id_error').text("아이디에 공백이 입력되었습니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+
+    //     }else if(id_length < 6 || id_length > 12){
+    //         $('#rep_id_error').text("아이디는 6-12자 이내로 입력되어야 합니다.");
+    //         $('#rep_id_error').css('display', 'inline-block');
+    //         $('#rep_id_error').css('borderTop', '1px solid red');
+    //         $('#rep_id_container').css('marginBottom', '2rem');
+    //     }
+    //     else if($('#chk_id').val() != ""){
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./modules/member/skins/mounda_login/dupl_proc.php",
+    //             async:false,
+    //             data: {
+    //                 user_id: $('#chk_id').val()
+    //             },
+    //             success: function (response) {
+    //                 if(response != ''){
+    //                     $('#rep_id_error').text("이미 사용중인 아이디입니다.");
+    //                     $('#rep_id_error').css('display', 'inline-block');
+    //                     $('#rep_id_error').css('borderTop', '1px solid red');
+    //                     $('#rep_id_container').css('marginBottom', '2rem');
+
+    //                 }else{
+
+    //                     $('#rep_id_container').css('marginBottom', '1rem');
+    //                     $('#rep_id_error').css('display', 'none');
+    //                     $('#rep_id_container').css('border', '1px solid #e6e6e6');
+    //                     $('#chk_id').addClass('active');
+    //                     $('#user_id').val($('#chk_id').val());
+    //                     $('#id_correct').css('display', 'block');
+    //                 }
+    //             }
+    //         });
+    //     }
+
+        
+    //     if($('#chk_id').hasClass('active') && $('#password').hasClass('active') && $('#password2').hasClass('active')){
+    //         $('#second_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#second_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // function chkUserId(event){
+    //     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\[\];_'",./`]/;
+    //     var check_eng = /[a-zA-Z]/;
+    //     var check_blank = /[\s]/g;
+    //     var first_char = $(event.target).val().charAt(0);
+    //     var id_length = $('#user_chk_id').val().length;
+
+    //     if($('#user_chk_id').val() == ""){
+    //         $('#user_id_error').text("아이디를 입력해주세요.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_spc.test($('#user_chk_id').val()) || check.test($('#user_chk_id').val()) || $('#user_chk_id').val().includes('admin') ){
+    //         $('#user_id_error').text("아이디에 입력 불가능한 문자가 있습니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if(!check_eng.test(first_char) ){
+    //         $('#user_id_error').text("아이디의 첫 글자는 영문자여야 합니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#user_chk_id').val())){
+    //         $('#user_id_error').text("아이디에 공백이 입력되었습니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+
+    //     }else if(id_length < 6 || id_length > 12){
+    //         $('#user_id_error').text("아이디는 6-12자 이내로 입력되어야 합니다.");
+    //         $('#user_id_error').css('display', 'inline-block');
+    //         $('#user_id_error').css('borderTop', '1px solid red');
+    //         $('#user_id_container').css('marginBottom', '2rem');
+    //     }
+    //     else if($('#user_chk_id').val() != ""){
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "./modules/member/skins/mounda_login/dupl_proc.php",
+    //             async:false,
+    //             data: {
+    //                 user_id: $('#user_chk_id').val()
+    //             },
+    //             success: function (response) {
+    //                 if(response != ''){
+    //                     $('#user_id_error').text("이미 사용중인 아이디입니다.");
+    //                     $('#user_id_error').css('display', 'inline-block');
+    //                     $('#user_id_error').css('borderTop', '1px solid red');
+    //                     $('#user_id_container').css('marginBottom', '2rem');
+
+    //                 }else{
+
+    //                     $('#user_id_container').css('marginBottom', '1rem');
+    //                     $('#user_id_error').css('display', 'none');
+    //                     $('#user_id_container').css('border', '1px solid #e6e6e6');
+    //                     $('#user_chk_id').addClass('active');
+    //                     $('#user_user_id').val($('#user_chk_id').val());
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+
+    // function chkPw(event){
+    //     var pw_length = $('#password').val().length;
+    //     var check_blank = /[\s]/g;
+    //     var check_eng = /[a-zA-Z]/g;
+    //     var check_num = /[0-9]/g;
+
+    //     focusInRemove(event);
+
+    //     if($('#password').val() == ""){
+    //         $('#rep_pw_error').text("비밀번호를 입력 해주세요.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(pw_length < 6){
+    //         $('#rep_pw_error').text("비밀번호 6자리 이상 입력 해주세요.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(!check_eng.test($('#password').val()) || !check_num.test($('#password').val())){
+    //         $('#rep_pw_error').text("영문 그리고 숫자가 포함되어야 합니다.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if(check_blank.test($('#password').val())){
+    //         $('#rep_pw_error').text("비밀번호에 공백이 포함되어 있습니다.");
+    //         $('#rep_pw_error').css('display', 'inline-block');
+    //         $('#rep_pw_error').css('borderTop', '1px solid red');
+    //         $('#rep_pw_container').css('marginBottom', '2rem');
+
+    //     }
+        
+    //     else if($('#password2').val() == ""){
+    //         $('#rep_pwchk_error').text("비밀번호를 한번 더 입력 해주세요.");
+    //         $('#rep_pwchk_error').css('display', 'inline-block');
+    //         $('#rep_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#rep_pwchk_container').css('marginBottom', '2rem');
+
+
+    //     }else if($('#password').val() != $('#password2').val()){
+    //         $('#rep_pwchk_error').text("비밀번호가 서로 일치하지 않습니다.");
+    //         $('#rep_pwchk_error').css('display', 'inline-block');
+    //         $('#rep_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#rep_pwchk_container').css('marginBottom', '2rem');
+
+    //     }else{
+    //         $('#password').addClass('active');
+    //         $('#password2').addClass('active');
+
+    //         $('#rep_pw_error').css("display", "none");
+    //         $('#rep_pwchk_error').css("display", "none");
+    //         $('#rep_pw_container').css('border', '1px solid #e6e6e6');
+    //         $('#rep_pw_container').css('marginBottom', '1rem');
+    //         $('#rep_pwchk_container').css('border', '1px solid #e6e6e6');
+    //         $('#rep_pwchk_container').css('marginBottom', '1rem');
+
+    //         $('#pw_correct').css('display', 'block');
+    //         $('#chkpw_correct').css('display', 'block');
+
+    //         $('.preview_icon').css('right', '4rem');
+
+    //     }
+
+    //     if($('#chk_id').hasClass('active') && $('#password').hasClass('active') && $('#password2').hasClass('active')){
+    //         $('#second_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#second_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // function chkUserPw(event){
+    //     var pw_length = $('#user_password').val().length;
+    //     var check_blank = /[\s]/g;
+    //     var check_eng = /[a-zA-Z]/g;
+    //     var check_num = /[0-9]/g;
+
+    //     if($('#user_password').val() == ""){
+    //         $('#user_pw_error').text("비밀번호를 입력 해주세요.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(pw_length < 6){
+    //         $('#user_pw_error').text("비밀번호 6자리 이상 입력 해주세요.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(!check_eng.test($('#user_password').val()) || !check_num.test($('#user_password').val())){
+    //         $('#user_pw_error').text("영문 그리고 숫자가 포함되어야 합니다.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+    //     }
+        
+    //     else if(check_blank.test($('#user_password').val())){
+    //         $('#user_pw_error').text("비밀번호에 공백이 포함되어 있습니다.");
+    //         $('#user_pw_error').css('display', 'inline-block');
+    //         $('#user_pw_error').css('borderTop', '1px solid red');
+    //         $('#user_pw_container').css('marginBottom', '2rem');
+
+    //     }
+        
+    //     else if($('#user_password2').val() == ""){
+    //         $('#user_pwchk_error').text("비밀번호를 한번 더 입력 해주세요.");
+    //         $('#user_pwchk_error').css('display', 'inline-block');
+    //         $('#user_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#user_pwchk_container').css('marginBottom', '2rem');
+
+
+    //     }else if($('#user_password').val() != $('#user_password2').val()){
+    //         $('#user_pwchk_error').text("비밀번호가 서로 일치하지 않습니다.");
+    //         $('#user_pwchk_error').css('display', 'inline-block');
+    //         $('#user_pwchk_error').css('borderTop', '1px solid red');
+    //         $('#user_pwchk_container').css('marginBottom', '2rem');
+
+    //     }else{
+    //         $('#user_password').addClass('active');
+    //         $('#user_password2').addClass('active');
+
+    //         $('#user_pw_error').css("display", "none");
+    //         $('#user_pwchk_error').css("display", "none");
+    //         $('#user_pw_container').css('border', '1px solid #e6e6e6');
+    //         $('#user_pw_container').css('marginBottom', '1rem');
+    //         $('#user_pwchk_container').css('border', '1px solid #e6e6e6');
+    //         $('#user_pwchk_container').css('marginBottom', '1rem');
+
+    //     }Bottom
+    // }
+
+
+    // function chkSelect(event){
+    //     console.log($(event.target));
+
+    //     focusInRemove(event);
+
+
+    //     if($(event.target).val() == null){
+    //         $('#rep_mc_error').text("모임 분류를 선택해주세요.");
+    //         $('#rep_mc_error').css('display', 'inline-block');
+    //         $('#rep_mc_error').css('borderTop', '1px solid red');
+    //         $('#meet_category_container').css('marginBottom', '2rem');
+    //     }else{
+    //         $('#rep_mc_error').css("display", "none");
+    //         $('#meet_category_container').css('border', '1px solid #e6e6e6');
+    //         $('#meet_category_container').css('marginBottom', '1rem');
+    //         $(event.target).addClass('active');
+    //     }
+
+    //     if($('#meet_name').hasClass('active') && $('#meet_id').hasClass('active') && $('#meet_category').hasClass('active') && $('#accept_agreement_0').attr('checked')){
+    //         $('#third_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#third_btnArea').css('opacity', 0.5);
+    //     }
+    // }
+
+    // $('.agreement > .check_box').on('click', ()=>{
+    //     if($('#accept_agreement_0').attr("checked")){
+    //         $('#rep_agree_error').css('display', 'none');
+    //         $('.terms_container').css('display', 'block');    
+    //         $('.b_bg').css('display', 'block');
+    //         $('.chk_btn').attr('src', "/modules/member/skins/mounda_login/layouts/Central_Server_2/asset/none_chk.svg");
+    //     }else{
+    //         $('#accept_agreement_0').attr("checked", false);
+    //         $('.terms_container').css('display', 'none');    
+    //         $('.b_bg').css('display', 'none');
+    //     }
+
+        
+    //     if($('#meet_name').hasClass('active') && $('#meet_id').hasClass('active') && $('#meet_category').hasClass('active') && $('#accept_agreement_0').attr('checked')){
+    //         $('#third_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#third_btnArea').css('opacity', 0.5);
+    //     }
+    // })
+
+    // $('.user_agreement > .check_box').on('click', ()=>{
+    //     $('#user_agree_error').css('display', 'none');
+    //     $('#user_accept_agreement_0').attr("checked", true);
+    // })
+
+    // $('#third_btn').on('click', ()=>{
+
+    //     var chk_meet_name = $('#meet_name').hasClass('active');
+    //     var chk_meet_id = $('#meet_id').hasClass('active');
+    //     var chk_meet_category = $('#meet_category').hasClass('active');
+    //     var chk_agree = $('#accept_agreement_0').attr('checked');
+    //     var check = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    //     var check_spc = /[~!@#$%^&*()+|<>?:{}=\-\_[\];'",./`]/;
+    //     var check_eng = /[a-zA-Z]/;
+    //     var check_blank = /[\s]/g;
+    //     var first_char = $('#meet_id').val().charAt(0);
+    //     var id_length = $('#meet_id').val().length;
+
+    //     if($('#meet_name').val() == ''){
+    //         $('#rep_mn_error').text("모임명을 입력해주세요");
+    //         $('#rep_mn_error').css('display', 'inline-block');
+    //         $('#rep_mn_error').css('borderTop', '1px solid red');
+    //         $('#meet_name_container').css('marginBottom', '2rem');
+    //     }
+
+    //     else if(check_blank.test($('#meet_name').val())){
+    //         $('#rep_mn_error').text("모임명에 공백이 입력되었습니다.");
+    //         $('#rep_mn_error').css('display', 'inline-block');
+    //         $('#rep_mn_error').css('borderTop', '1px solid red');
+    //         $('#meet_name_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if($('#meet_id').val() == ""){
+    //         $('#rep_mi_error').text("모임 아이디를 입력해주세요.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if( check_spc.test($('#meet_id').val()) || check.test($('#meet_id').val()) || $('#meet_id').val().includes('admin') ){
+    //         $('#rep_mi_error').text("아이디에 입력 불가능한 문자가 있습니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if(!check_eng.test(first_char) ){
+    //         $('#rep_mi_error').text("아이디의 첫 글자는 영문자여야 합니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if(check_blank.test($('#meet_id').val())){
+    //         $('#rep_mi_error').text("아이디에 공백이 입력되었습니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+
+    //     }else if(id_length < 2 || id_length > 12){
+    //         $('#rep_mi_error').text("아이디는 2-12자 이내로 입력되어야 합니다.");
+    //         $('#rep_mi_error').css('display', 'inline-block');
+    //         $('#rep_mi_error').css('borderTop', '1px solid red');
+    //         $('#meet_id_container').css('marginBottom', '2rem');
+    //     }
+
+    //     if( $('#meet_category').val() == "0"){
+    //         $('#rep_mc_error').text("모임 분류를 선택해주세요");
+    //         $('#rep_mc_error').css('display', 'inline-block');
+    //         $('#rep_mc_error').css('borderTop', '1px solid red');
+    //         $('#meet_category_container').css('marginBottom', '2rem');
+
+    //     }
+
+    //     if(!$('#accept_agreement_0').attr('checked')){
+    //         $('#rep_agree_error').text("이용약관을 확인한 후, 동의해주세요");
+    //         $('#rep_agree_error').css('display', 'inline-block');
+    //     }
+
+    //     if(chk_meet_id == true && chk_meet_category == true && chk_agree == 'checked'){
+    //         $('.register_wrapper').eq(0).css('display', 'none');
+    //         $('.register_wrapper').eq(1).css('display', 'none');
+    //         $('.register_wrapper').eq(2).css('display', 'none');
+    //         $('.register_wrapper').eq(3).css('display', 'block');
+            
+    //     }
+
+        
+    //     if($('#meet_id').hasClass('active') && $('#meet_name').hasClass('active') && $('#meet_category').hasClass('active') && $('#accept_agreement_0').attr('checked')){
+    //         $('#third_btnArea').css('opacity', 1);
+    //     }else{
+    //         $('#third_btnArea').css('opacity', 0.5);
+    //     }
+        
+
+    // })
+
+    // $('.login-btn').on('click', ()=>{
+    //     $('#fo_insert_member').submit();
+    // })
+
+//     (function ($) {
+//         // label for setup
+//         $('.control-label[for]').each(function () {
+//             var $this = $(this);
+//             if ($this.attr('for') == '') {
+//                 $this.attr('for', $this.next().children(':visible:first').attr('id'));
+//             }
+//         });
+
+//         $(function () {
+//             // check if the browser support type date.
+//             if ($(".inputDate").prop('type') != 'date') {
+//                 var option = {
+//                     changeMonth: true,
+//                     changeYear: true,
+//                     gotoCurrent: false,
+//                     yearRange: '-200:+10',
+//                     dateFormat: 'yy-mm-dd',
+//                     defaultDate: new Date("{date('Y-m-d',time())}"),
+//                     minDate: new Date("{date('Y-m-d',strtotime('-200 years'))}"),
+
+//                     onSelect: function () {
+//                         $(this).prev('input[type="hidden"]').val(this.value.replace(/-/g, ""))
+//                     }
+//                 };
+//                 $.extend($.datepicker.regional['{$lang_type}'], option);
+
+//                 //if the browser does not support type date input, start datepicker. If it does, brower's UI will show their datepicker.
+//                 $(".inputDate").datepicker(option);
+//             } else {
+//                 $(".inputDate").prop('readonly', false);
+//             }
+//             $(".dateRemover").click(function () {
+//                 $(this).prevAll('input').val('');
+//                 return false;
+//             });
+//         });
+//     })(jQuery);
+
+
+</script> -->
+
+<!-- <include target="./common_footer.html" /> -->
