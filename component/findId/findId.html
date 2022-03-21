@@ -1,0 +1,99 @@
+<link rel="stylesheet" href="../reset.css">
+<link rel="stylesheet" href="../theme.css">
+<link rel="stylesheet" href="../findId/style.css" />
+
+<div class="body" oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
+    <div class="find_id_wrapper">
+        <div class="logo"><a href="javascript:;"><img src="/img/logo1.png" alt="로고"></a></div>
+        <img src="/modules/member/skins/mounda_login/layouts/Central_Server_2/asset/back_btn-left.png" class="arrow_btn p_a" alt="" onclick="history.back();">
+        <div class="card-top">
+            <h1 class="cont_tit">ID 찾기</h1>
+            <p class="cont_txt">안녕하세요!<br />아이디를 찾기 위해 아래 정보를 입력해주세요 :&rpar;</p>
+        </div>
+
+        <input autofocus class="find_id_input" type="text" value="" placeholder="이메일을 입력해주세요" onfocusout="chkEmail(event)"/>
+        <i class="fa-solid fa-check" id="find_id_correct" style="display:none;"></i>
+        <span class="help-inline" id="find_id_error"></span>
+        <button class="active_btn find_id_submit off_btn" onclick="sendEmail(event)">확인</button>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+    <div class="find_id_wrapper" id="success">
+        <div class="logo"><a href="javascirpt:;"><img src="/img/logo1.png" alt="로고"></a></div>
+        <div class="desc">
+            <div class="ico-bg"></div>
+            <h2>이메일 발송이 완료되었습니다.</h2>
+            <p>이메일을 확인 바랍니다.</p>
+        </div>
+        
+            <a href="https://manager.mounda.co.kr/admin_login">
+                <button class="active_btn find_id_submit">확인</button>
+            </a>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+</div>
+
+<!-- <script>
+
+    function chkEmail(event){
+        var check_blank = /[\s]/g;
+        
+        if( $(event.target).val() == "" ){
+            $('#find_id_error').text("이메일이 입력되지 않았습니다.");
+            $('#find_id_error').css('display', 'inline-block');
+            $('#find_id_error').css('borderTop', '1px solid red');
+            $('#find_id_correct').css('display', 'none');
+            $(".find_id_submit").addClass('off_btn')
+        }else if(check_blank.test($(event.target).val())){
+            $('#find_id_error').text("이메일 형식이 올바르지 않습니다.");
+            $('#find_id_error').css('display', 'inline-block');
+            $('#find_id_correct').css('display', 'none');
+            $('#find_id_error').css('borderTop', '1px solid red');
+
+            $(".find_id_submit").addClass('off_btn')
+        }else{
+            $('#find_id_error').css('display', 'none');
+            $('#find_id_correct').css('display', 'block');
+            $(".find_id_submit").removeClass('off_btn');
+        }
+    }
+
+    function sendEmail(event){
+
+        $.ajax({
+            type: "POST",
+            url: "./layouts/Central_Server_2/proc/email_verify_proc.php",
+            data: {
+                type: "find_id",
+                changed_email:$('.find_id_input').val(),
+            },
+            success: function (response) {
+                console.log(response);
+                if(response == "is_blank"){
+                    $('#find_id_error').text("이메일이 입력되지 않았습니다.");
+                    $('#find_id_error').css('borderTop', '1px solid red');
+                    $('#find_id_error').css('display', 'inline-block');
+                    $('#find_id_correct').css('display', 'none');
+                }else if(response == "is_not_email"){
+                    $('#find_id_error').text("이메일 형식이 올바르지 않습니다.");
+                    $('#find_id_error').css('borderTop', '1px solid red');
+                    $('#find_id_error').css('display', 'inline-block');
+                    $('#find_id_correct').css('display', 'none');
+                }else if(response == "not_found"){
+                    $('#find_id_error').text("존재하지 않는 이메일입니다.");
+                    $('#find_id_error').css('borderTop', '1px solid red');
+                    $('#find_id_error').css('display', 'inline-block');
+                    $('#find_id_correct').css('display', 'none');
+                }else if(response == 'success'){
+                    $('#find_id_error').css('display', 'none');
+                    $('.find_id_wrapper').css('borderBottom', '1px solid #aaa');
+                    $('.find_id_wrapper').css('display', 'none');
+                    $('#find_id_correct').css('display', 'block');
+                    $('#success').css('display', 'block');
+                }
+                
+            }
+        });
+    }
+</script> -->
