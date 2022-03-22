@@ -1,0 +1,153 @@
+<link rel="stylesheet" href="../reset.css">
+<link rel="stylesheet" href="../theme.css">
+<link rel="stylesheet" href="../findPw/findPw.css" />
+
+<div class="body" oncontextmenu='return false' onselectstart='return false' ondragstart='return false'>
+    <div class="find_pw_wrapper">
+        <div class="logo"><a href="javascript:;"><img src="/img/logo1.png" alt="로고"></a></div>
+        <img src="/modules/member/skins/mounda_login/layouts/Central_Server_2/asset/back_btn-left.png" class="arrow_btn p_a" alt="" onclick="history.back();">
+        <div class="card-top">
+            <h1 class="cont_tit">비밀번호 찾기</h1>
+            <p class="cont_txt">비밀번호를 찾기 위해 다음 항목을 입력해 주세요.</p>
+        </div>
+
+        <div class="form_txt d-flex flex-direct-col">
+            <input autofocus class="find_pw_input" id="find_pw_id" type="text" value="" placeholder="아이디를 입력해주세요" onfocusout="chkId(event)"/>
+            <i class="fa-solid fa-check" id="find_pw_id_correct" style="display:none;"></i>
+            <span class="help-inline" id="find_id_error"></span>
+        </div>
+
+        
+        <div class="form_txt d-flex flex-direct-col">
+            <input class="find_pw_input" id="find_pw_email" type="text" value="" placeholder="이메일을 입력해주세요" onfocusout="chkEmail(event)"/>
+            <i class="fa-solid fa-check" id="find_pw_email_correct" style="display:none;"></i>
+            <span class="help-inline" id="find_email_error"></span>
+        </div>
+        
+
+        <button class="active_btn find_pw_submit off_btn" onclick="sendEmail(event)">확인</button>
+
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+    <div class="find_pw_wrapper" id="success">
+        <div class="logo"><a href="javascript:;"><img src="/img/logo1.png" alt="로고"></a></div>
+        <div class="desc">
+            <div class="ico-bg"></div>
+            <h2>이메일 발송이 완료되었습니다.</h2>
+            <p>이메일을 확인 바랍니다.</p>
+        </div>
+        
+            <a href="javascript:;">
+                <button class="active_btn find_pw_submit">확인</button>
+            </a>
+        <p class="comp_info">© MOMIT Inc. All rights reserved.</p>
+    </div>
+
+</div>
+
+<!-- <script>
+    function errorRemove(){
+
+    }
+
+    function chkId(event){
+        
+        if( $(event.target).val() == "" ){
+            $('#find_id_error').text("아이디가 입력되지 않았습니다.");
+            $('#find_id_error').css('display', 'inline-block');
+            $('#find_id_error').css('borderTop', '1px solid red');
+            $('#find_pw_id_correct').css('display', 'none');
+            $('#find_pw_id').removeClass('active');
+        }else{
+            $('#find_pw_id').addClass('active');
+            $('#find_id_error').css('display', 'none');
+            $('#find_pw_id_correct').css('display', 'block');
+        }
+
+        if($('#find_pw_id').hasClass('active') && $('#find_pw_email').hasClass('active')){
+            $('.find_pw_submit').removeClass('off_btn');
+        }
+    }
+
+    function chkEmail(event){
+        var check_blank = /[\s]/g;
+        
+        if( $(event.target).val() == "" ){
+            $('#find_email_error').text("이메일이 입력되지 않았습니다.");
+            $('#find_email_error').css('display', 'inline-block');
+            $('#find_email_error').css('borderTop', '1px solid red');
+            $('#find_pw_email_correct').css('display', 'none');
+            $('#find_pw_email').removeClass('active');
+        }else if(check_blank.test($(event.target).val())){
+            $('#find_email_error').text("이메일 형식이 올바르지 않습니다.");
+            $('#find_email_error').css('display', 'inline-block');
+            $('#find_email_error').css('borderTop', '1px solid red');
+            $('#find_pw_email_correct').css('display', 'none');
+            $('#find_pw_email').removeClass('active');
+        }else{
+            $('#find_email_error').css('display', 'none');
+            $('#find_pw_email_correct').css('display', 'block');
+            $('#find_pw_email').addClass('active');
+        }
+
+        if($('#find_pw_id').hasClass('active') && $('#find_pw_email').hasClass('active')){
+            $('.find_pw_submit').removeClass('off_btn');
+        }
+    }
+
+    function sendEmail(event){
+
+        $.ajax({
+            type: "POST",
+            url: "./layouts/Central_Server_2/proc/email_verify_proc.php",
+            data: {
+                type: "find_pw",
+                verify_id: $('#find_pw_id').val(),
+                changed_email:$('#find_pw_email').val(),
+            },dataType:'json',
+            success: function (response) {
+                if(response['id_error'] == "is_id_blank"){
+                    $('#find_id_error').text("아이디가 입력되지 않았습니다.");
+                    $('#find_id_error').css('display', 'inline-block');
+                    $('#find_id_error').css('borderTop', '1px solid red');
+                    $('#find_pw_id_correct').css('display', 'none');
+                }else if(response['id_error'] == "id_not_found"){
+                    $('#find_id_error').text("존재하지 않는 아이디입니다.");
+                    $('#find_id_error').css('display', 'inline-block');
+                    $('#find_id_error').css('borderTop', '1px solid red');
+                    $('#find_pw_id_correct').css('display', 'none');
+                };
+
+                if(response['email_error'] == "is_blank"){
+                    $('#find_email_error').text("이메일이 입력되지 않았습니다.");
+                    $('#find_email_error').css('display', 'inline-block');
+                    $('#find_email_error').css('borderTop', '1px solid red');
+                    $('#find_pw_email_correct').css('display', 'none');
+
+                }else if(response['email_error'] == "is_not_email"){
+                    $('#find_email_error').text("이메일 형식이 올바르지 않습니다.");
+                    $('#find_email_error').css('display', 'inline-block');
+                    $('#find_email_error').css('borderTop', '1px solid red');
+                    $('#find_pw_email_correct').css('display', 'none');
+
+                }else if(response['email_error'] == "not_found"){
+                    $('#find_email_error').text("존재하지 않는 이메일입니다.");
+                    $('#find_email_error').css('display', 'inline-block');
+                    $('#find_email_error').css('borderTop', '1px solid red');
+                    $('#find_pw_email_correct').css('display', 'none');
+                };
+
+                if(response['email_error'] == null && response['id_error'] == null){
+                    $('.find_pw_wrapper').css('display', 'none');
+                    $('#success').css('display', 'block');
+                }
+
+
+            },error:function(request,status,error){
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+           }
+
+        });
+    }
+</script> -->
